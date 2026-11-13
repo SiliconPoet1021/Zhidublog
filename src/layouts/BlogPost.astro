@@ -140,6 +140,24 @@ const breadcrumbLd = JSON.stringify({
 		</header>
 
 		<div class="container article-shell" class:list={{ 'has-toc': visibleHeadings.length > 0 }}>
+			{
+				visibleHeadings.length > 0 && (
+					<aside class="table-of-contents" aria-label="本文目录">
+						<p>本文目录</p>
+						<nav>
+							{visibleHeadings.map((heading) => (
+								<a
+									class:list={{ 'toc-level-3': heading.depth === 3 }}
+									href={`#${heading.slug}`}
+								>
+									{heading.text}
+								</a>
+							))}
+						</nav>
+					</aside>
+				)
+			}
+
 			<div class="article-main">
 				{
 					visibleHeadings.length > 0 && (
@@ -255,23 +273,6 @@ const breadcrumbLd = JSON.stringify({
 				</footer>
 			</div>
 
-			{
-				visibleHeadings.length > 0 && (
-					<aside class="table-of-contents" aria-label="本文目录">
-						<p>本文目录</p>
-						<nav>
-							{visibleHeadings.map((heading) => (
-								<a
-									class:list={{ 'toc-level-3': heading.depth === 3 }}
-									href={`#${heading.slug}`}
-								>
-									{heading.text}
-								</a>
-							))}
-						</nav>
-					</aside>
-				)
-			}
 		</div>
 	</article>
 
@@ -470,7 +471,7 @@ const breadcrumbLd = JSON.stringify({
 		}
 
 		.article-shell.has-toc {
-			grid-template-columns: minmax(0, 760px) 220px;
+			grid-template-columns: 220px minmax(0, 760px);
 		}
 
 		.article-main {
@@ -512,8 +513,8 @@ const breadcrumbLd = JSON.stringify({
 			display: flex;
 			flex-direction: column;
 			gap: 9px;
-			padding-left: 14px;
-			border-left: 1px solid var(--line);
+			padding-right: 14px;
+			border-right: 1px solid var(--line);
 		}
 
 		.table-of-contents a {
@@ -528,7 +529,7 @@ const breadcrumbLd = JSON.stringify({
 		}
 
 		.table-of-contents .toc-level-3 {
-			padding-left: 12px;
+			padding-right: 12px;
 			font-size: 11px;
 		}
 
