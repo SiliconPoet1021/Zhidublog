@@ -1,189 +1,44 @@
-# 知渡博客
+# 知渡 · JinSun 的技术与成长手记
 
-一个基于 Astro 的个人经验分享站，用来记录技术实践、项目复盘和成长经验。
+> 把走过的路，写成可以复用的地图。
 
-## 已包含
+知渡是 JinSun 的个人经验分享站，记录技术实践、项目复盘与成长经历。
 
-- 响应式首页、文章列表与文章详情
-- 文章关键词搜索、相关推荐和上一篇/下一篇
-- 技术实践、成长记录、项目复盘三个分类
-- 按年份整理的归档页、标签索引和独立标签页
-- 项目作品页、关于页和 404 页面
-- Markdown / MDX 文章工作流
-- 移动端文章目录、作者卡片、代码复制、章节锚点与文章链接分享
-- SEO 与 GEO 基础、结构化数据、社交分享图、站点地图和 RSS
-- Cloudflare Pages 自动部署、安全响应头和静态资源缓存
-- Cloudflare Web Analytics 访问统计（可选），并保留百度统计接入
+这里不追逐热点，也不试图给出所有答案。每一篇内容都尽量从一个真实问题出发，写清楚当时的背景、选择、取舍和结果，让经验不只停留在“做过”，而是能被未来的自己与同路的人重新使用。
 
-## 本地开发
+[开始阅读](https://zhidublog.pages.dev/blog/) · [关于作者](https://zhidublog.pages.dev/about/) · [RSS 订阅](https://zhidublog.pages.dev/rss.xml)
 
-需要 Node.js 22.23.4 或更高版本。
+## 这里会写什么
 
-```bash
-npm install
-npm run dev
-```
+- **技术实践**：项目中的实现方案、踩坑记录和可复用方法。
+- **项目复盘**：从需求、设计到上线的完整过程与关键决策。
+- **成长记录**：学习、工作与长期积累中的真实变化。
 
-本地地址为 `http://localhost:4321`。
+## 写作原则
 
-生产构建：
+- **真实**：不编造数据，不把别人的成果说成自己的经历。
+- **具体**：说明背景、限制和取舍，而不是只给结论。
+- **可复用**：让读者能带走一套方法、一份清单或一个可验证的思路。
 
-```bash
-npm run build
-```
+## 最近文章
 
-构建结果输出到 `dist/`。
+- [在博客里写数学公式：KaTeX 与 LaTeX 快速上手](https://zhidublog.pages.dev/blog/latex-math-guide/)
+- [为什么我决定重新开始写博客](https://zhidublog.pages.dev/blog/why-i-start-writing/)
+- [个人博客的技术选型：为什么先用 Astro 和静态部署](https://zhidublog.pages.dev/blog/why-astro-static-first/)
+- [知渡博客第一版：从默认模板到可持续写作](https://zhidublog.pages.dev/blog/zhidu-v1-retrospective/)
 
-## 编写文章
+## 关于作者
 
-文章位于 `src/content/blog/`，支持 `.md` 和 `.mdx`。
+我是 JinSun，知渡博客的作者和维护者。
 
-```yaml
----
-title: '文章标题'
-description: '用于列表和搜索结果的文章摘要'
-pubDate: 2026-11-11
-category: tech
-tags:
-  - Astro
-  - 工程化
-featured: false
-draft: false
----
-```
+我希望这里保存的不只是结论，还有得出这些结论的过程。如果这些记录能帮你少走一点弯路，或者让你对自己的问题有更清楚的判断，这个博客就有了意义。
 
-可选字段：
+- 博客：[https://zhidublog.pages.dev](https://zhidublog.pages.dev)
+- GitHub：[SiliconPoet1021](https://github.com/SiliconPoet1021)
+- 订阅：[RSS](https://zhidublog.pages.dev/rss.xml)
 
-- `updatedDate`：最后更新时间
-- `heroImage`：文章封面图片
-- `heroImageAlt`：封面图片说明
-- `featured`：是否作为首页精选
-- `draft`：草稿文章不会出现在生产构建中
+## 内容授权
 
-`category` 可选值：
+除特别注明外，本站由 JinSun 创作的原创文字内容采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans) 协议授权。
 
-- `tech`：技术实践
-- `growth`：成长记录
-- `project`：项目复盘
-
-## 代码块和数学公式
-
-代码块使用三个反引号，并在开头标注语言，构建时会自动生成语法高亮：
-
-````markdown
-```python
-def greet(name):
-    return f"Hello, {name}"
-```
-````
-
-数学公式使用 LaTeX 语法：
-
-```markdown
-行内公式：$E = mc^2$
-
-$$
-\int_0^1 x^2 \, dx = \frac{1}{3}
-$$
-```
-
-文章正文支持公式。如果正文确实需要显示美元符号，请写成 `\$`，避免被识别为公式。完整示例见 `src/content/blog/latex-math-guide.md`。
-
-Markdown、代码高亮和数学公式都在构建阶段解析。Cloudflare Pages 只发布已经生成的 HTML、CSS、字体和图片，不会在每次访问时重新解析文章，也不需要数据库或长期运行的 Node.js 服务。
-
-文章文件名为 URL 的一部分。例如 `why-astro-static-first.md` 会生成：
-
-```text
-/blog/why-astro-static-first/
-```
-
-## 访问统计
-
-第一版可以使用 Cloudflare Web Analytics 查看访问人数、浏览量、热门页面和来源趋势。面向中国大陆读者时，也可以同时接入百度统计。没有填写对应编号或令牌时，不会加载任何统计脚本。
-
-1. 在百度统计中新增网站并获取统计代码编号。
-2. 在百度搜索资源平台完成站点验证并提交 `sitemap-index.xml`。
-3. 复制 `.env.example` 为 `.env`，填写编号。
-
-```env
-PUBLIC_BAIDU_ANALYTICS_ID=你的百度统计编号
-PUBLIC_BAIDU_SITE_VERIFICATION=你的站点验证代码
-PUBLIC_GOOGLE_SITE_VERIFICATION=你的 Google 验证代码
-PUBLIC_BING_SITE_VERIFICATION=你的 Bing 验证代码
-PUBLIC_CF_WEB_ANALYTICS_TOKEN=你的统计令牌
-```
-
-百度统计适合补充中国大陆的访问数据。后续需要更完整的自有管理看板时，可以再接入 Umami 或 Cloudflare 的自定义分析方案。
-
-SEO 与 GEO 的上线、内容和每月复盘清单见 [deploy/SEO-GEO.md](deploy/SEO-GEO.md)。
-
-## 部署
-
-### Cloudflare Pages（推荐）
-
-Cloudflare Pages 直接连接 GitHub 仓库，不需要购买服务器或配置 Nginx。以后把文章推送到 GitHub，Pages 会自动重新构建上线。
-
-在 Cloudflare 控制台进入 **Workers & Pages → Create → Pages → Connect to Git**，选择 `SiliconPoet1021/Zhidublog`，使用以下配置：
-
-| 配置项 | 值 |
-| --- | --- |
-| Project name | `zhidublog` |
-| Production branch | `main` |
-| Framework preset | Astro |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Root directory | `/` |
-
-建议添加以下环境变量：
-
-```env
-SITE_URL=https://你的域名
-NODE_VERSION=22.23.4
-PUBLIC_BAIDU_ANALYTICS_ID=
-PUBLIC_BAIDU_SITE_VERIFICATION=
-PUBLIC_GOOGLE_SITE_VERIFICATION=
-PUBLIC_BING_SITE_VERIFICATION=
-PUBLIC_CF_WEB_ANALYTICS_TOKEN=
-```
-
-尚未绑定自定义域名时，`SITE_URL` 可以先填写 Pages 分配的 `https://项目名.pages.dev`。绑定域名后再改成正式地址并重新部署。
-
-完整上线步骤见 [deploy/CLOUDFLARE.md](deploy/CLOUDFLARE.md)。
-
-### 国内服务器（可选备用）
-
-项目仍然保留 Nginx 初始化脚本和 Windows 一键发布能力：
-
-```text
-deploy/setup-server.sh
-deploy/deploy-domestic.ps1
-deploy/README.md
-```
-
-国内服务器需要已备案域名，并需要在 `.env` 中额外填写服务器信息。完整步骤见 [deploy/README.md](deploy/README.md)，上线和安全检查分别见 [deploy/LAUNCH.md](deploy/LAUNCH.md) 与 [deploy/SECURITY.md](deploy/SECURITY.md)。
-
-Cloudflare Pages 不需要配置 `DEPLOY_HOST` 和 SSH 密钥。
-
-## 项目结构
-
-```text
-src/
-├── components/       公共组件
-├── content/blog/     Markdown / MDX 文章
-├── layouts/          页面布局
-├── lib/              文章读取与工具函数
-├── pages/            路由页面
-└── styles/           全局样式
-scripts/check-site.mjs 上线前页面检查
-deploy/                Cloudflare 指南与可选国内部署脚本
-```
-
-## 上线前检查
-
-- 修改 `src/consts.ts` 中的站点名称和 GitHub 地址
-- 修改 `src/pages/about.astro` 中的个人介绍
-- 添加或替换 `src/content/blog/` 中的示例文章
-- 在 Cloudflare Pages 中配置 `SITE_URL` 和 `NODE_VERSION`
-- 配置访问统计令牌
-- 运行 `npm run check` 检查页面链接和基础 SEO
-- 用手机和桌面浏览器分别检查文章阅读体验
+转载时请注明作者和来源；商业使用或超出协议范围的用途，请先联系作者获得授权。
