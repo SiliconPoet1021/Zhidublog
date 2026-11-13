@@ -34,6 +34,29 @@
 	html {
 		scroll-behavior: smooth;
 		background: var(--paper);
+		scrollbar-color: rgb(23 34 28 / 18%) transparent;
+		scrollbar-width: thin;
+	}
+
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		border: 2px solid transparent;
+		border-radius: 999px;
+		background: rgb(23 34 28 / 18%);
+		background-clip: content-box;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: rgb(23 34 28 / 32%);
+		background-clip: content-box;
 	}
 
 	body {
@@ -443,6 +466,17 @@
 		font-size: 14px;
 		line-height: 1.75;
 		box-shadow: var(--shadow);
+		scrollbar-color: rgb(255 255 255 / 20%) transparent;
+	}
+
+	.prose pre::-webkit-scrollbar-thumb {
+		background: rgb(255 255 255 / 20%);
+		background-clip: content-box;
+	}
+
+	.prose pre::-webkit-scrollbar-thumb:hover {
+		background: rgb(255 255 255 / 34%);
+		background-clip: content-box;
 	}
 
 	.code-copy-button {

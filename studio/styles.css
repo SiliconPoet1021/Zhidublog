@@ -32,6 +32,32 @@ body {
 	height: 100%;
 }
 
+html {
+	scrollbar-color: rgb(23 34 28 / 16%) transparent;
+	scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	border: 2px solid transparent;
+	border-radius: 999px;
+	background: rgb(23 34 28 / 18%);
+	background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgb(23 34 28 / 30%);
+	background-clip: content-box;
+}
+
 body {
 	margin: 0;
 	overflow: hidden;
@@ -306,7 +332,22 @@ a {
 	overflow-y: auto;
 	padding-right: 3px;
 	scrollbar-width: thin;
-	scrollbar-color: var(--line-strong) transparent;
+	scrollbar-color: rgb(23 34 28 / 14%) transparent;
+}
+
+.post-list::-webkit-scrollbar {
+	width: 6px;
+}
+
+.post-list::-webkit-scrollbar-thumb {
+	border-width: 1px;
+	background: rgb(23 34 28 / 16%);
+	background-clip: content-box;
+}
+
+.post-list::-webkit-scrollbar-thumb:hover {
+	background: rgb(23 34 28 / 28%);
+	background-clip: content-box;
 }
 
 .list-loading,
