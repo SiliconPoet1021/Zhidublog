@@ -1,9 +1,10 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { type CollectionEntry, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import { getPublishedPosts, getReadingTime } from '../../lib/posts';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
+	const posts = await getPublishedPosts();
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: post,
@@ -12,9 +13,43 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const readingTime = getReadingTime(post.body);
+const posts = await getPublishedPosts();
+const currentIndex = posts.findIndex((item) => item.id === post.id);
+const newerPost = currentIndex > 0 ? posts[currentIndex - 1] : undefined;
+const olderPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : undefined;
+const relatedPosts = posts
+	.filter((item) => item.id !== post.id)
+	.map((item) => {
+		const sharedTags = item.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+		const score = sharedTags * 2 + (item.data.category === post.data.category ? 1 : 0);
+		return { post: item, score };
+	})
+	.filter((item) => item.score > 0)
+	.sort(
+		(a, b) =>
+			b.score - a.score || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf(),
+	)
+	.slice(0, 3)
+	.map((item) => item.post);
+
+if (relatedPosts.length < 2) {
+	for (const item of posts) {
+		if (item.id === post.id || relatedPosts.some((related) => related.id === item.id)) continue;
+		relatedPosts.push(item);
+		if (relatedPosts.length >= 2) break;
+	}
+}
 ---
 
-<BlogPost {...post.data}>
+<BlogPost
+	{...post.data}
+	headings={headings}
+	readingTime={readingTime}
+	newerPost={newerPost}
+	olderPost={olderPost}
+	relatedPosts={relatedPosts}
+>
 	<Content />
 </BlogPost>

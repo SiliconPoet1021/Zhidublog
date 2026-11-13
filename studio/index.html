@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light" />
+		<title>知渡写作台</title>
+		<link rel="stylesheet" href="/styles.css" />
+	</head>
+	<body>
+		<header class="topbar">
+			<div class="brand">
+				<span class="brand-mark" aria-hidden="true">知</span>
+				<div>
+					<strong>知渡写作台</strong>
+					<small>只在本机运行的写作空间</small>
+				</div>
+			</div>
+			<div class="topbar-actions">
+				<span class="local-status"><i></i> 本地模式</span>
+				<a class="site-link" href="http://localhost:4321/" target="_blank" rel="noreferrer">
+					查看网站 <span aria-hidden="true">↗</span>
+				</a>
+			</div>
+		</header>
+
+		<div class="studio-shell">
+			<aside class="sidebar">
+				<div class="sidebar-heading">
+					<div>
+						<p class="eyebrow">YOUR NOTES</p>
+						<h1>我的文章</h1>
+					</div>
+					<span id="postCount" class="post-count">0</span>
+				</div>
+
+				<button id="newPostButton" class="new-post-button" type="button">
+					<span aria-hidden="true">＋</span> 新建文章
+				</button>
+
+				<div class="sidebar-tools">
+					<label class="search-field">
+						<span class="sr-only">搜索文章</span>
+						<svg viewBox="0 0 20 20" aria-hidden="true">
+							<circle cx="8.5" cy="8.5" r="5.5"></circle>
+							<path d="m13 13 4 4"></path>
+						</svg>
+						<input id="searchInput" type="search" placeholder="搜索文章…" autocomplete="off" />
+					</label>
+					<button id="importButton" class="icon-button" type="button" title="导入 Markdown">
+						<span aria-hidden="true">⇧</span>
+						<span class="sr-only">导入 Markdown</span>
+					</button>
+					<input id="importInput" type="file" accept=".md,.markdown,.txt" hidden />
+				</div>
+
+				<div id="postList" class="post-list" aria-live="polite">
+					<div class="list-loading">正在读取文章…</div>
+				</div>
+
+				<div class="sidebar-tip">
+					<strong>发布流程</strong>
+					<p>保存只会写入本地项目；点击“发布”会推送到 GitHub，Cloudflare Pages 随后自动构建上线。</p>
+				</div>
+			</aside>
+
+			<main class="workspace">
+				<section id="emptyState" class="empty-state">
+					<div class="empty-illustration" aria-hidden="true">
+						<span></span>
+						<strong>写</strong>
+					</div>
+					<p class="eyebrow">START A NEW NOTE</p>
+					<h2>从今天想清楚的一件事开始</h2>
+					<p>左侧可以新建或选择文章。支持 Markdown、实时预览、草稿和分类管理。</p>
+					<button id="emptyNewButton" class="primary-button" type="button">写第一篇文章</button>
+				</section>
+
+				<section id="editorPanel" class="editor-panel" hidden>
+					<header class="editor-header">
+						<div>
+							<p id="editorMode" class="eyebrow">NEW ARTICLE</p>
+							<h2 id="editorHeading">新建文章</h2>
+						</div>
+						<div class="editor-actions">
+							<a id="previewSiteLink" class="secondary-button" href="#" target="_blank" rel="noreferrer">
+								站点预览
+							</a>
+							<button id="saveButton" class="secondary-button" type="button">保存</button>
+							<button id="publishButton" class="primary-button" type="button">发布到线上</button>
+						</div>
+					</header>
+
+					<form id="editorForm" class="editor-form">
+						<label class="field field-title">
+							<span>文章标题</span>
+							<input
+								id="titleInput"
+								name="title"
+								type="text"
+								maxlength="120"
+								placeholder="例如：一个 Bug 让我重新理解了缓存"
+								required
+							/>
+						</label>
+
+						<label class="field">
+							<span>文章摘要</span>
+							<textarea
+								id="descriptionInput"
+								name="description"
+								rows="2"
+								maxlength="300"
+								placeholder="留空时会从正文自动生成"
+							></textarea>
+						</label>
+
+						<div class="meta-grid">
+							<label class="field">
+								<span>URL 名称</span>
+								<input
+									id="slugInput"
+									name="slug"
+									type="text"
+									maxlength="80"
+									pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+									placeholder="留空自动生成"
+								/>
+								<small>只使用小写字母、数字和短横线</small>
+							</label>
+
+							<label class="field">
+								<span>发布日期</span>
+								<input id="pubDateInput" name="pubDate" type="date" required />
+							</label>
+
+							<label class="field">
+								<span>分类</span>
+								<select id="categoryInput" name="category">
+									<option value="tech">技术实践</option>
+									<option value="growth">成长记录</option>
+									<option value="project">项目复盘</option>
+								</select>
+							</label>
+
+							<label class="field">
+								<span>标签</span>
+								<input
+									id="tagsInput"
+									name="tags"
+									type="text"
+									placeholder="Astro, 工程化, 复盘"
+								/>
+								<small>使用逗号分隔</small>
+							</label>
+						</div>
+
+						<div class="options-row">
+							<label class="switch-field">
+								<input id="featuredInput" name="featured" type="checkbox" />
+								<span class="switch" aria-hidden="true"></span>
+								<span>设为首页精选</span>
+							</label>
+							<label class="switch-field">
+								<input id="draftInput" name="draft" type="checkbox" />
+								<span class="switch" aria-hidden="true"></span>
+								<span>保存为草稿</span>
+							</label>
+							<span id="saveState" class="save-state">尚未保存</span>
+						</div>
+
+						<div class="writing-grid">
+							<section class="writing-pane">
+								<div class="pane-header">
+									<div>
+										<strong>Markdown 正文</strong>
+										<span id="characterCount">0 字</span>
+									</div>
+									<div class="editor-tools" aria-label="Markdown 快捷插入">
+										<button id="insertHeadingButton" class="text-tool" type="button">小标题</button>
+										<button id="insertInlineMathButton" class="text-tool" type="button">行内公式</button>
+										<button id="insertBlockMathButton" class="text-tool" type="button">公式块</button>
+										<button id="insertCodeBlockButton" class="text-tool" type="button">代码块</button>
+									</div>
+								</div>
+								<textarea
+									id="contentInput"
+									class="content-input"
+									name="content"
+									spellcheck="true"
+									placeholder="## 先说说背景&#10;&#10;把遇到的问题、当时的判断和最后的结论写下来…"
+									required
+								></textarea>
+							</section>
+
+							<section class="preview-pane">
+								<div class="pane-header">
+									<div>
+										<strong>预览</strong>
+										<span>保存前即可检查</span>
+									</div>
+								</div>
+								<iframe
+									id="previewFrame"
+									title="文章预览"
+									sandbox=""
+									srcdoc="<p style='font-family:sans-serif;color:#69736c'>开始输入正文后，这里会显示预览。</p>"
+								></iframe>
+							</section>
+						</div>
+					</form>
+				</section>
+			</main>
+		</div>
+
+		<dialog id="publishDialog" class="publish-dialog">
+			<form method="dialog">
+				<p class="eyebrow">PUBLISH TO CLOUDFLARE</p>
+				<h2>确认发布这篇文章？</h2>
+				<p>写作台会把当前文章保存到本地并推送 GitHub。Cloudflare Pages 检测到更新后会自动构建并发布新版本。</p>
+				<div class="dialog-actions">
+					<button class="secondary-button" value="cancel">再检查一下</button>
+					<button id="confirmPublishButton" class="primary-button" value="confirm">确认发布</button>
+				</div>
+			</form>
+		</dialog>
+
+		<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+		<script type="module" src="/app.js"></script>
+	</body>
+</html>

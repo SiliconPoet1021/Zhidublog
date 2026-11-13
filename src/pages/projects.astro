@@ -1,0 +1,206 @@
+---
+import { GITHUB_URL } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+	{
+		index: '01',
+		title: '知渡博客',
+		status: '持续更新',
+		description:
+			'一个记录技术实践与成长经验的内容站点，包含文章体系、分类、项目展示、RSS 与访问统计。',
+		stack: ['Astro', 'TypeScript', 'Cloudflare Pages'],
+		href: `${GITHUB_URL}/Zhidublog`,
+	},
+];
+---
+
+<BaseLayout title="项目与作品" description="记录正在做和已经完成的项目，以及从想法到上线过程中的关键决策。">
+	<section class="page-hero">
+		<div class="container page-hero-grid">
+			<div>
+				<p class="eyebrow">PROJECTS &amp; WORK</p>
+				<h1 class="page-title">项目与作品</h1>
+				<p class="page-description">
+					用项目检验方法，用复盘保留判断。这里会逐步整理做过的产品、工具和实验，以及它们真正解决了什么问题。
+				</p>
+			</div>
+			<p class="page-hero-note">
+				项目不是简历上的名词。<br />它应该能运行，也应该能被解释。
+			</p>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container">
+			<div class="project-list">
+				{
+					projects.map((project) => (
+						<article class="project-card">
+							<div class="project-number">{project.index}</div>
+							<div class="project-content">
+								<div class="project-heading">
+									<h2>{project.title}</h2>
+									<span>{project.status}</span>
+								</div>
+								<p>{project.description}</p>
+								<div class="project-stack">
+									{project.stack.map((item) => <span>{item}</span>)}
+								</div>
+							</div>
+							<a class="project-link" href={project.href} target="_blank" rel="noreferrer">
+								查看源码 <span aria-hidden="true">↗</span>
+							</a>
+						</article>
+					))
+				}
+			</div>
+
+			<div class="project-note">
+				<p class="eyebrow">NEXT PROJECT</p>
+				<h2>下一件值得做的事</h2>
+				<p>
+					后续会补充更多真实项目与复盘。如果你也在做相似的事情，欢迎通过 GitHub 交流。
+				</p>
+				<a class="text-link" href={GITHUB_URL} target="_blank" rel="noreferrer">访问 GitHub</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.project-list {
+		display: grid;
+		gap: 14px;
+	}
+
+	.project-card {
+		display: grid;
+		grid-template-columns: 70px minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 30px;
+		padding: 34px;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		background: rgb(255 253 247 / 65%);
+		transition:
+			border-color 180ms ease,
+			transform 180ms ease,
+			box-shadow 180ms ease;
+	}
+
+	.project-card:hover {
+		border-color: var(--line-strong);
+		box-shadow: var(--shadow);
+		transform: translateY(-3px);
+	}
+
+	.project-number {
+		color: var(--accent);
+		font-family: var(--font-serif);
+		font-size: 28px;
+	}
+
+	.project-heading {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 14px;
+	}
+
+	.project-heading h2 {
+		font-size: clamp(28px, 4vw, 40px);
+		letter-spacing: -0.03em;
+	}
+
+	.project-heading span {
+		padding: 4px 10px;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--gold) 24%, transparent);
+		color: var(--ink-soft);
+		font-size: 9px;
+		letter-spacing: 0.08em;
+	}
+
+	.project-content > p {
+		max-width: 650px;
+		margin-top: 12px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 1.8;
+	}
+
+	.project-stack {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 7px;
+		margin-top: 18px;
+	}
+
+	.project-stack span {
+		padding: 3px 9px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		color: var(--muted);
+		font-size: 10px;
+	}
+
+	.project-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		color: var(--ink);
+		font-size: 12px;
+		font-weight: 700;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.project-note {
+		max-width: 780px;
+		margin: 90px auto 0;
+		padding: 50px;
+		border-radius: var(--radius);
+		background: var(--green);
+		color: rgb(255 253 247 / 68%);
+		text-align: center;
+	}
+
+	.project-note .eyebrow {
+		color: var(--gold);
+	}
+
+	.project-note h2 {
+		margin-top: 16px;
+		color: var(--paper-light);
+		font-size: clamp(32px, 5vw, 48px);
+	}
+
+	.project-note > p:not(.eyebrow) {
+		max-width: 540px;
+		margin: 18px auto 26px;
+		font-family: var(--font-serif);
+		line-height: 1.9;
+	}
+
+	.project-note .text-link {
+		color: var(--gold);
+	}
+
+	@media (max-width: 760px) {
+		.project-card {
+			grid-template-columns: 42px 1fr;
+			gap: 18px;
+			padding: 24px;
+		}
+
+		.project-link {
+			grid-column: 2;
+		}
+
+		.project-note {
+			margin-top: 60px;
+			padding: 38px 24px;
+		}
+	}
+</style>

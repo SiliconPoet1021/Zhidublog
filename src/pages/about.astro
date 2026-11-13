@@ -1,63 +1,241 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import { GITHUB_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<BaseLayout title="关于这里" description={`了解 ${SITE_TITLE} 的写作方向与记录原则。`}>
+	<section class="page-hero">
+		<div class="container page-hero-grid">
+			<div>
+				<p class="eyebrow">ABOUT THIS SPACE</p>
+				<h1 class="page-title">关于这里</h1>
+				<p class="page-description">
+					这是一个个人经验分享站。它不追逐热点，也不试图给出所有答案，只记录那些经过实践、值得重新整理的事情。
+				</p>
+			</div>
+			<p class="page-hero-note">
+				“把经验写下来，<br />是对自己判断的一次检查。”
+			</p>
+		</div>
+	</section>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+	<section class="section">
+		<div class="container about-grid">
+			<article class="about-main prose">
+				<h2>写给未来的自己，也写给同路的人</h2>
+				<p>
+					我是这个博客的作者。这里主要记录技术实践、项目复盘和个人成长。很多内容来自一个具体的问题：为什么这样做？当时有哪些取舍？如果再来一次，我会改变什么？
+				</p>
+				<p>
+					我不打算把它做成一个“什么都懂”的教程站。比起完整覆盖一个领域，我更愿意把真实经历写清楚，让读者看到一项技术、一段经历背后的上下文。
+				</p>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+				<h2>这里会写什么</h2>
+				<ul>
+					<li><strong>技术实践：</strong>项目中的实现方案、踩坑记录和可复用方法。</li>
+					<li><strong>项目复盘：</strong>从需求、设计到上线的完整过程与关键决策。</li>
+					<li><strong>成长记录：</strong>学习、工作与长期积累中的真实变化。</li>
+				</ul>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+				<h2>三条记录原则</h2>
+				<p>
+					<strong>真实：</strong>不编造数据，不把别人的成果说成自己的经历。<br />
+					<strong>具体：</strong>尽量说明背景、限制和取舍，而不是只给结论。<br />
+					<strong>可复用：</strong>让读者能带走一套方法、一份清单或一个可验证的思路。
+				</p>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+				<h2>关于访问统计</h2>
+				<p>
+					本站可能使用百度统计了解页面访问趋势和受欢迎的内容。统计侧重访问人数与页面浏览情况，不用于建立个人画像；如果没有启用统计服务，站点不会加载相应脚本。
+				</p>
+
+				<h2>保持联系</h2>
+				<p>
+					如果你对文章内容有不同看法，或者发现其中的错误，欢迎通过 GitHub 与我交流。认真、具体的反馈比单纯的赞美更珍贵。
+				</p>
+				<p>
+					<a class="button" href={GITHUB_URL} target="_blank" rel="noreferrer">访问 GitHub</a>
+				</p>
+			</article>
+
+			<aside class="about-aside">
+				<div class="profile-card">
+					<div class="profile-mark" aria-hidden="true">知</div>
+					<div>
+						<strong>{SITE_TITLE}</strong>
+						<span>技术与成长手记</span>
+					</div>
+				</div>
+
+				<div class="fact-card">
+					<p>站点说明</p>
+					<dl>
+						<div>
+							<dt>内容方向</dt>
+							<dd>技术 · 项目 · 成长</dd>
+						</div>
+						<div>
+							<dt>更新方式</dt>
+							<dd>长期、非定期</dd>
+						</div>
+						<div>
+							<dt>技术栈</dt>
+							<dd>Astro · Cloudflare</dd>
+						</div>
+						<div>
+							<dt>阅读方式</dt>
+							<dd>网页 · RSS</dd>
+						</div>
+					</dl>
+				</div>
+
+				<blockquote>
+					<p>{SITE_DESCRIPTION}</p>
+				</blockquote>
+			</aside>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.about-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 720px) 280px;
+		justify-content: space-between;
+		gap: 80px;
+	}
+
+	.about-main {
+		font-size: 17px;
+	}
+
+	.about-main h2:first-child {
+		margin-top: 0;
+	}
+
+	.about-aside {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.profile-card,
+	.fact-card {
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		background: rgb(255 253 247 / 64%);
+	}
+
+	.profile-card {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 22px;
+	}
+
+	.profile-mark {
+		display: grid;
+		width: 58px;
+		height: 58px;
+		flex: none;
+		place-items: center;
+		border-radius: 18px 18px 18px 5px;
+		background: var(--green);
+		color: var(--paper-light);
+		font-family: var(--font-serif);
+		font-size: 28px;
+	}
+
+	.profile-card div:last-child {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.profile-card strong {
+		color: var(--ink);
+		font-family: var(--font-serif);
+		font-size: 24px;
+		letter-spacing: 0.1em;
+	}
+
+	.profile-card span {
+		color: var(--muted);
+		font-size: 10px;
+		letter-spacing: 0.1em;
+	}
+
+	.fact-card {
+		padding: 24px;
+	}
+
+	.fact-card > p {
+		color: var(--muted);
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+	}
+
+	.fact-card dl {
+		margin: 18px 0 0;
+	}
+
+	.fact-card dl div {
+		display: flex;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 10px 0;
+		border-top: 1px solid var(--line);
+		font-size: 11px;
+	}
+
+	.fact-card dt {
+		color: var(--muted);
+	}
+
+	.fact-card dd {
+		margin: 0;
+		color: var(--ink-soft);
+		text-align: right;
+	}
+
+	.about-aside blockquote {
+		margin: 8px 0 0;
+		padding: 22px;
+		border-left: 2px solid var(--gold);
+		color: var(--muted);
+		font-family: var(--font-serif);
+		font-size: 15px;
+		line-height: 1.9;
+	}
+
+	.about-aside blockquote p {
+		margin: 0;
+	}
+
+	@media (max-width: 900px) {
+		.about-grid {
+			grid-template-columns: 1fr;
+			gap: 50px;
+		}
+
+		.about-aside {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.about-aside blockquote {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.about-aside {
+			grid-template-columns: 1fr;
+		}
+
+		.about-aside blockquote {
+			grid-column: auto;
+		}
+	}
+</style>

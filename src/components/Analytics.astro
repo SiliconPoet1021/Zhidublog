@@ -1,0 +1,29 @@
+---
+const baiduId = import.meta.env.PUBLIC_BAIDU_ANALYTICS_ID?.trim();
+const cloudflareToken = import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim();
+---
+
+{
+	baiduId && (
+		<script is:inline define:vars={{ baiduId }}>
+			window._hmt = window._hmt || [];
+			(() => {
+				const script = document.createElement('script');
+				script.async = true;
+				script.src = `https://hm.baidu.com/hm.js?${encodeURIComponent(baiduId)}`;
+				document.head.append(script);
+			})();
+		</script>
+	)
+}
+
+{
+	cloudflareToken && (
+		<script
+			is:inline
+			defer
+			src="https://static.cloudflareinsights.com/beacon.min.js"
+			data-cf-beacon={JSON.stringify({ token: cloudflareToken })}
+		/>
+	)
+}

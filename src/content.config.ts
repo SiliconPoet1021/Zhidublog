@@ -10,10 +10,14 @@ const blog = defineCollection({
 		z.object({
 			title: z.string(),
 			description: z.string(),
-			// Transform string to Date object
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
+			heroImageAlt: z.string().default(''),
+			category: z.enum(['tech', 'growth', 'project']),
+			tags: z.array(z.string()).default([]),
+			featured: z.boolean().default(false),
+			draft: z.boolean().default(false),
 		}),
 });
 

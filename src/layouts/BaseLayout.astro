@@ -1,0 +1,58 @@
+---
+import type { ImageMetadata } from 'astro';
+import Analytics from '../components/Analytics.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: ImageMetadata | string;
+	type?: 'website' | 'article';
+	noindex?: boolean;
+	publishedTime?: Date;
+}
+
+const { title, description, image, type = 'website', noindex = false, publishedTime } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead
+			title={title}
+			description={description}
+			image={image}
+			type={type}
+			noindex={noindex}
+			publishedTime={publishedTime}
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main-content">跳到正文</a>
+		<Header />
+		<main id="main-content">
+			<slot />
+		</main>
+		<Footer />
+		<button id="backToTop" class="back-to-top" type="button" aria-label="返回页面顶部" hidden>
+			<span aria-hidden="true">↑</span>
+		</button>
+		<Analytics />
+		<script>
+			const backToTop = document.querySelector<HTMLButtonElement>('#backToTop');
+
+			const updateBackToTop = () => {
+				if (backToTop) backToTop.hidden = window.scrollY < 700;
+			};
+
+			backToTop?.addEventListener('click', () => {
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			});
+
+			updateBackToTop();
+			window.addEventListener('scroll', updateBackToTop, { passive: true });
+		</script>
+	</body>
+</html>

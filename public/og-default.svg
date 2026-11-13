@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f4f0e6"/>
+  <circle cx="1030" cy="90" r="240" fill="#e5b657" opacity=".13"/>
+  <circle cx="1070" cy="560" r="310" fill="#cf5c3e" opacity=".08"/>
+  <rect x="80" y="74" width="76" height="76" rx="24" fill="#173f35"/>
+  <path d="M99 118c16-23 27 10 43-9 8-10 15-12 23-8" fill="none" stroke="#fffdf7" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="99" cy="118" r="5" fill="#cf5c3e"/>
+  <circle cx="165" cy="101" r="5" fill="#e5b657"/>
+  <text x="80" y="292" fill="#17221c" font-family="Georgia, 'Times New Roman', serif" font-size="112" font-weight="700" letter-spacing="16">ZHIDU</text>
+  <text x="86" y="357" fill="#69736c" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="7">TECH · GROWTH · PROJECTS</text>
+  <line x1="86" y1="422" x2="720" y2="422" stroke="#cf5c3e" stroke-width="3"/>
+  <text x="86" y="486" fill="#34463d" font-family="Georgia, 'Times New Roman', serif" font-size="34">Notes on building, learning, and becoming.</text>
+  <text x="86" y="548" fill="#69736c" font-family="Arial, sans-serif" font-size="20" letter-spacing="3">A PERSONAL FIELD NOTE</text>
+  <path d="M925 395c66-82 116 45 190-36" fill="none" stroke="#173f35" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+  <circle cx="925" cy="395" r="8" fill="#cf5c3e"/>
+  <circle cx="1115" cy="359" r="8" fill="#e5b657"/>
+</svg>

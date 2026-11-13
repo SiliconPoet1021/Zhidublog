@@ -1,63 +1,230 @@
-# Astro Starter Kit: Blog
+# 知渡博客
 
-```sh
-npm create astro@latest -- --template blog
+一个基于 Astro 的个人经验分享站，用来记录技术实践、项目复盘和成长经验。
+
+## 已包含
+
+- 响应式首页、文章列表与文章详情
+- 文章关键词搜索、相关推荐和上一篇/下一篇
+- 技术实践、成长记录、项目复盘三个分类
+- 按年份整理的归档页、标签索引和独立标签页
+- 项目作品页、关于页和 404 页面
+- Markdown / MDX 文章工作流
+- 移动端文章目录、作者卡片、代码复制、章节锚点与文章链接分享
+- SEO、结构化数据、社交分享图、站点地图和 RSS
+- Cloudflare Pages 自动部署、安全响应头和静态资源缓存
+- Cloudflare Web Analytics 访问统计（可选），并保留百度统计接入
+
+## 本地开发
+
+需要 Node.js 22.23.4 或更高版本。
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+本地地址为 `http://localhost:4321`。
 
-Features:
+生产构建：
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+```bash
+npm run build
+```
 
-## 🚀 Project Structure
+构建结果输出到 `dist/`。
 
-Inside of your Astro project, you'll see the following folders and files:
+## 本地写作台
+
+项目内置了一个只在本机运行的写作台，不需要手动创建 Markdown 文件。
+
+Windows 下可以直接双击：
 
 ```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+start-studio.cmd
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+脚本会启动 Astro 本地预览和写作服务，并自动打开：
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```text
+http://127.0.0.1:4322
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+也可以手动运行：
 
-Any static assets, like images, can be placed in the `public/` directory.
+```bash
+npm run dev
+npm run studio
+```
 
-## 🧞 Commands
+写作台支持：
 
-All commands are run from the root of the project, from a terminal:
+- 新建和编辑文章
+- 搜索已有文章
+- Markdown 实时预览
+- 导入已有 Markdown 文件
+- 设置分类、标签、精选和草稿
+- 保存到 `src/content/blog/`
+- 一键提交并推送到 GitHub
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+注意：
 
-## 👀 Want to learn more?
+- “保存”只会写入本地项目，不会上线。
+- “发布到线上”会为当前文章创建 Git 提交并推送。
+- 推送成功后，Cloudflare Pages 会自动构建并上线；本机不需要保持运行。
+- 如果以后需要国内服务器作为备用线路，可以再启用 `deploy/` 中的可选脚本。
+- 写作台只监听 `127.0.0.1`，不会暴露到公网。
+- 发布前请确保本机 Git 已登录 GitHub，并具备该仓库的推送权限。
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 编写文章
 
-## Credit
+文章位于 `src/content/blog/`，支持 `.md` 和 `.mdx`。
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+```yaml
+---
+title: '文章标题'
+description: '用于列表和搜索结果的文章摘要'
+pubDate: 2026-11-11
+category: tech
+tags:
+  - Astro
+  - 工程化
+featured: false
+draft: false
+---
+```
+
+可选字段：
+
+- `updatedDate`：最后更新时间
+- `heroImage`：文章封面图片
+- `heroImageAlt`：封面图片说明
+- `featured`：是否作为首页精选
+- `draft`：草稿文章不会出现在生产构建中
+
+`category` 可选值：
+
+- `tech`：技术实践
+- `growth`：成长记录
+- `project`：项目复盘
+
+## 代码块和数学公式
+
+代码块使用三个反引号，并在开头标注语言，构建时会自动生成语法高亮：
+
+````markdown
+```python
+def greet(name):
+    return f"Hello, {name}"
+```
+````
+
+数学公式使用 LaTeX 语法：
+
+```markdown
+行内公式：$E = mc^2$
+
+$$
+\int_0^1 x^2 \, dx = \frac{1}{3}
+$$
+```
+
+文章正文和本机写作台预览都支持公式。如果正文确实需要显示美元符号，请写成 `\$`，避免被识别为公式。
+
+写作台正文工具栏还提供「行内公式」「公式块」和「代码块」快捷按钮。完整示例见 `src/content/blog/latex-math-guide.md`。
+
+Markdown、代码高亮和数学公式都在构建阶段解析。Cloudflare Pages 只发布已经生成的 HTML、CSS、字体和图片，不会在每次访问时重新解析文章，也不需要数据库或长期运行的 Node.js 服务。
+
+文章文件名为 URL 的一部分。例如 `why-astro-static-first.md` 会生成：
+
+```text
+/blog/why-astro-static-first/
+```
+
+## 访问统计
+
+第一版可以使用 Cloudflare Web Analytics 查看访问人数、浏览量、热门页面和来源趋势。面向中国大陆读者时，也可以同时接入百度统计。没有填写对应编号或令牌时，不会加载任何统计脚本。
+
+1. 在百度统计中新增网站并获取统计代码编号。
+2. 在百度搜索资源平台完成站点验证并提交 `sitemap-index.xml`。
+3. 复制 `.env.example` 为 `.env`，填写编号。
+
+```env
+PUBLIC_BAIDU_ANALYTICS_ID=你的百度统计编号
+PUBLIC_BAIDU_SITE_VERIFICATION=你的站点验证代码
+PUBLIC_CF_WEB_ANALYTICS_TOKEN=你的统计令牌
+```
+
+百度统计适合补充中国大陆的访问数据。后续需要更完整的自有管理看板时，可以再接入 Umami 或 Cloudflare 的自定义分析方案。
+
+## 部署
+
+### Cloudflare Pages（推荐）
+
+Cloudflare Pages 直接连接 GitHub 仓库，不需要购买服务器或配置 Nginx。以后写作台推送文章到 GitHub，Pages 会自动重新构建上线。
+
+在 Cloudflare 控制台进入 **Workers & Pages → Create → Pages → Connect to Git**，选择 `SiliconPoet1021/Zhidublog`，使用以下配置：
+
+| 配置项 | 值 |
+| --- | --- |
+| Project name | `zhidublog` |
+| Production branch | `main` |
+| Framework preset | Astro |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | `/` |
+
+建议添加以下环境变量：
+
+```env
+SITE_URL=https://你的域名
+NODE_VERSION=22.23.4
+PUBLIC_BAIDU_ANALYTICS_ID=
+PUBLIC_BAIDU_SITE_VERIFICATION=
+PUBLIC_CF_WEB_ANALYTICS_TOKEN=
+```
+
+尚未绑定自定义域名时，`SITE_URL` 可以先填写 Pages 分配的 `https://项目名.pages.dev`。绑定域名后再改成正式地址并重新部署。
+
+完整上线步骤见 [deploy/CLOUDFLARE.md](deploy/CLOUDFLARE.md)。
+
+### 国内服务器（可选备用）
+
+项目仍然保留 Nginx 初始化脚本和 Windows 一键发布能力：
+
+```text
+deploy/setup-server.sh
+deploy/deploy-domestic.ps1
+deploy/README.md
+```
+
+国内服务器需要已备案域名，并需要在 `.env` 中额外填写服务器信息。完整步骤见 [deploy/README.md](deploy/README.md)，上线和安全检查分别见 [deploy/LAUNCH.md](deploy/LAUNCH.md) 与 [deploy/SECURITY.md](deploy/SECURITY.md)。
+
+Cloudflare Pages 不需要配置 `DEPLOY_HOST` 和 SSH 密钥。写作台只负责推送 GitHub，Cloudflare 负责后续构建。
+
+## 项目结构
+
+```text
+src/
+├── components/       公共组件
+├── content/blog/     Markdown / MDX 文章
+├── layouts/          页面布局
+├── lib/              文章读取与工具函数
+├── pages/            路由页面
+└── styles/           全局样式
+scripts/studio.mjs    本地写作台服务
+scripts/check-site.mjs 上线前页面检查
+studio/               写作台网页界面
+deploy/                Cloudflare 指南与可选国内部署脚本
+start-studio.cmd      Windows 一键启动入口
+```
+
+## 上线前检查
+
+- 修改 `src/consts.ts` 中的站点名称和 GitHub 地址
+- 修改 `src/pages/about.astro` 中的个人介绍
+- 添加或替换 `src/content/blog/` 中的示例文章
+- 在 Cloudflare Pages 中配置 `SITE_URL` 和 `NODE_VERSION`
+- 配置访问统计令牌
+- 运行 `npm run check` 检查页面链接和基础 SEO
+- 用手机和桌面浏览器分别检查文章阅读体验

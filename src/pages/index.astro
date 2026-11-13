@@ -1,59 +1,623 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import FormattedDate from '../components/FormattedDate.astro';
+import PostCard from '../components/PostCard.astro';
+import { CATEGORY_META, SITE_DESCRIPTION, SITE_TITLE, type CategoryKey } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPostHref, getPublishedPosts } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+const featured = posts.find((post) => post.data.featured) ?? posts[0];
+const latestPosts = posts.filter((post) => post.id !== featured?.id).slice(0, 4);
+const categoryEntries = Object.entries(CATEGORY_META) as [
+	CategoryKey,
+	(typeof CATEGORY_META)[CategoryKey],
+][];
+const categoryCounts = Object.fromEntries(
+	categoryEntries.map(([key]) => [key, posts.filter((post) => post.data.category === key).length]),
+) as Record<CategoryKey, number>;
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="home-hero">
+		<div class="container hero-grid">
+			<div class="hero-copy">
+				<p class="eyebrow">TECH · GROWTH · PROJECTS</p>
+				<h1>把走过的路，<br /><em>写成地图。</em></h1>
+				<p class="hero-lead">
+					这里记录技术实践、项目复盘与成长经验。少一点速成，多一点真实过程；希望每篇内容都能被未来的自己，也被同路的你使用。
+				</p>
+				<div class="hero-actions">
+					<a class="button" href="/blog/">开始阅读</a>
+					<a class="button button--secondary" href="/about/">关于这里</a>
+				</div>
+				<div class="hero-principles" aria-label="站点原则">
+					<span>真实经历</span>
+					<span>可复用方法</span>
+					<span>长期更新</span>
+				</div>
+			</div>
+
+			<div class="hero-visual" aria-hidden="true">
+				<div class="orbit orbit-one"></div>
+				<div class="orbit orbit-two"></div>
+				<div class="core">
+					<span>知</span>
+					<small>渡</small>
+				</div>
+				<div class="floating-note note-top">记录</div>
+				<div class="floating-note note-right">实践</div>
+				<div class="floating-note note-bottom">复盘</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section directions">
+		<div class="container">
+			<div class="section-heading">
+				<div>
+					<p class="eyebrow">CONTENT MAP</p>
+					<h2>从三个方向持续记录</h2>
+				</div>
+				<p>不是把知识搬到这里，而是留下判断、过程与结果。先从一个真实问题开始。</p>
+			</div>
+
+			<div class="direction-grid">
+				{
+					categoryEntries.map(([key, category], index) => (
+						<a class="direction-card" href={`/categories/${key}/`}>
+							<span class="direction-index">0{index + 1}</span>
+							<div>
+								<div class="direction-title">
+									<h3>{category.label}</h3>
+									<span>{categoryCounts[key]} 篇</span>
+								</div>
+								<p>{category.description}</p>
+							</div>
+							<span class="direction-arrow" aria-hidden="true">↗</span>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	{
+		featured && (
+			<section class="section section--tight">
+				<div class="container">
+					<div class="section-heading">
+						<div>
+							<p class="eyebrow">EDITOR'S PICK</p>
+							<h2>先读这一篇</h2>
+						</div>
+						<a class="text-link" href="/blog/">全部文章</a>
+					</div>
+
+					<article class="featured-story">
+						<div class="featured-content">
+							<div class="featured-meta">
+								<span>{CATEGORY_META[featured.data.category].label}</span>
+								<FormattedDate date={featured.data.pubDate} />
+							</div>
+							<h2><a href={getPostHref(featured)}>{featured.data.title}</a></h2>
+							<p>{featured.data.description}</p>
+							<a class="featured-link" href={getPostHref(featured)}>
+								阅读这篇记录 <span aria-hidden="true">→</span>
+							</a>
+						</div>
+						<div class="featured-ornament" aria-hidden="true">
+							<span>READ</span>
+							<strong>01</strong>
+							<i></i>
+						</div>
+					</article>
+				</div>
+			</section>
+		)
+	}
+
+	<section class="section latest">
+		<div class="container">
+			<div class="section-heading">
+				<div>
+					<p class="eyebrow">LATEST NOTES</p>
+					<h2>最近更新</h2>
+				</div>
+				<p>写作不是终点，而是把经历重新组织一遍的过程。</p>
+			</div>
+
+			{
+				latestPosts.length > 0 ? (
+					<div class="post-grid">
+						{latestPosts.map((post) => <PostCard post={post} />)}
+					</div>
+				) : (
+					<div class="empty-state">新的记录正在路上。</div>
+				)
+			}
+		</div>
+	</section>
+
+	<section class="section closing-section">
+		<div class="container closing-card">
+			<p class="eyebrow">A NOTE TO THE FUTURE</p>
+			<h2>慢一点写，<br />让经验真正留下。</h2>
 			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to
-				build a personal website, blog, or portfolio with Astro.
+				这个站点会持续整理技术、项目和成长中的真实问题。你可以从 RSS
+				订阅更新，也可以从一篇文章开始认识这里。
 			</p>
-			<p>
-				This template comes with a few integrations already configured in your{' '}
-				<code>astro.config.mjs</code> file. You can customize your setup with{' '}
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like
-				Tailwind, React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>
-					Edit this page in <code>src/pages/index.astro</code>
-				</li>
-				<li>
-					Edit the site header items in <code>src/components/Header.astro</code>
-				</li>
-				<li>
-					Add your name to the footer in <code>src/components/Footer.astro</code>
-				</li>
-				<li>
-					Check out the included blog posts in <code>src/content/blog/</code>
-				</li>
-				<li>
-					Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code>
-				</li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to{' '}
-				<a href="https://docs.astro.build/">read the docs</a> or{' '}
-				<a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out{' '}
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a> by{' '}
-				<a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+			<div class="closing-actions">
+				<a class="button" href="/about/">了解这个站点</a>
+				<a class="text-link" href="/rss.xml">订阅 RSS</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.home-hero {
+		position: relative;
+		overflow: hidden;
+		padding-block: 94px 78px;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.home-hero::before {
+		position: absolute;
+		z-index: -1;
+		top: 18%;
+		left: -8%;
+		width: 320px;
+		height: 320px;
+		border-radius: 50%;
+		background: radial-gradient(circle, rgb(229 182 87 / 16%), transparent 70%);
+		content: "";
+	}
+
+	.hero-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+		align-items: center;
+		gap: 72px;
+	}
+
+	.hero-copy h1 {
+		max-width: 760px;
+		margin-top: 18px;
+		font-size: clamp(54px, 8vw, 92px);
+		letter-spacing: -0.065em;
+		line-height: 1.02;
+	}
+
+	.hero-copy h1 em {
+		color: var(--accent);
+		font-style: normal;
+	}
+
+	.hero-lead {
+		max-width: 650px;
+		margin-top: 30px;
+		color: var(--muted);
+		font-family: var(--font-serif);
+		font-size: 18px;
+		line-height: 1.95;
+	}
+
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 34px;
+	}
+
+	.hero-principles {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 24px;
+		margin-top: 38px;
+		color: var(--muted);
+		font-size: 11px;
+		letter-spacing: 0.06em;
+	}
+
+	.hero-principles span {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.hero-principles span::before {
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background: var(--gold);
+		content: "";
+	}
+
+	.hero-visual {
+		position: relative;
+		display: grid;
+		width: min(100%, 430px);
+		aspect-ratio: 1;
+		place-items: center;
+		margin-inline: auto;
+	}
+
+	.orbit {
+		position: absolute;
+		border: 1px solid var(--line-strong);
+		border-radius: 50%;
+	}
+
+	.orbit-one {
+		inset: 5%;
+	}
+
+	.orbit-two {
+		inset: 18%;
+		border-style: dashed;
+		transform: rotate(18deg);
+	}
+
+	.core {
+		position: relative;
+		display: flex;
+		width: 170px;
+		height: 170px;
+		align-items: center;
+		justify-content: center;
+		border-radius: 48% 52% 56% 44%;
+		background: var(--green);
+		color: var(--paper-light);
+		box-shadow: 0 35px 70px rgb(23 63 53 / 28%);
+		transform: rotate(-6deg);
+	}
+
+	.core span {
+		font-family: var(--font-serif);
+		font-size: 64px;
+		line-height: 1;
+		transform: rotate(6deg);
+	}
+
+	.core small {
+		position: absolute;
+		right: 26px;
+		bottom: 24px;
+		color: var(--gold);
+		font-family: var(--font-serif);
+		font-size: 14px;
+		transform: rotate(6deg);
+	}
+
+	.floating-note {
+		position: absolute;
+		padding: 7px 12px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--paper-light);
+		color: var(--muted);
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		box-shadow: 0 8px 24px rgb(23 34 28 / 7%);
+	}
+
+	.note-top {
+		top: 10%;
+		left: 11%;
+		transform: rotate(-6deg);
+	}
+
+	.note-right {
+		top: 40%;
+		right: 0;
+		transform: rotate(5deg);
+	}
+
+	.note-bottom {
+		bottom: 9%;
+		left: 19%;
+		transform: rotate(4deg);
+	}
+
+	.direction-grid {
+		display: grid;
+		gap: 12px;
+	}
+
+	.direction-card {
+		display: grid;
+		grid-template-columns: 64px 1fr 40px;
+		align-items: center;
+		gap: 26px;
+		padding: 28px 30px;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		background: rgb(255 253 247 / 55%);
+		text-decoration: none;
+		transition:
+			background 180ms ease,
+			border-color 180ms ease,
+			transform 180ms ease;
+	}
+
+	.direction-card:hover {
+		border-color: var(--line-strong);
+		background: var(--paper-light);
+		transform: translateX(6px);
+	}
+
+	.direction-index {
+		color: var(--accent);
+		font-family: var(--font-serif);
+		font-size: 18px;
+	}
+
+	.direction-title {
+		display: flex;
+		align-items: baseline;
+		gap: 14px;
+	}
+
+	.direction-title h3 {
+		font-size: 27px;
+	}
+
+	.direction-title span {
+		color: var(--muted);
+		font-size: 10px;
+		letter-spacing: 0.08em;
+	}
+
+	.direction-card p {
+		margin-top: 7px;
+		color: var(--muted);
+		font-size: 13px;
+	}
+
+	.direction-arrow {
+		color: var(--muted);
+		font-size: 20px;
+		text-align: right;
+	}
+
+	.featured-story {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 300px;
+		overflow: hidden;
+		border-radius: calc(var(--radius) + 4px);
+		background: var(--green);
+		color: rgb(255 253 247 / 72%);
+		box-shadow: 0 30px 80px rgb(13 45 38 / 18%);
+	}
+
+	.featured-content {
+		padding: clamp(34px, 6vw, 62px);
+	}
+
+	.featured-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 14px;
+		color: rgb(255 253 247 / 58%);
+		font-size: 10px;
+		letter-spacing: 0.08em;
+	}
+
+	.featured-meta span {
+		color: var(--gold);
+		font-weight: 700;
+	}
+
+	.featured-content h2 {
+		max-width: 720px;
+		margin-top: 24px;
+		color: var(--paper-light);
+		font-size: clamp(34px, 5vw, 54px);
+		letter-spacing: -0.04em;
+	}
+
+	.featured-content h2 a {
+		text-decoration: none;
+	}
+
+	.featured-content h2 a:hover {
+		color: var(--gold);
+	}
+
+	.featured-content > p {
+		max-width: 650px;
+		margin-top: 22px;
+		font-family: var(--font-serif);
+		font-size: 15px;
+		line-height: 1.9;
+	}
+
+	.featured-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		margin-top: 34px;
+		color: var(--paper-light);
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-decoration: none;
+	}
+
+	.featured-link:hover {
+		color: var(--gold);
+	}
+
+	.featured-ornament {
+		position: relative;
+		display: flex;
+		overflow: hidden;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: 36px;
+		border-left: 1px solid rgb(255 255 255 / 10%);
+		background: rgb(255 255 255 / 3%);
+	}
+
+	.featured-ornament span {
+		color: rgb(255 253 247 / 40%);
+		font-size: 9px;
+		letter-spacing: 0.2em;
+	}
+
+	.featured-ornament strong {
+		color: var(--gold);
+		font-family: var(--font-serif);
+		font-size: 100px;
+		font-weight: 400;
+		line-height: 0.8;
+	}
+
+	.featured-ornament i {
+		position: absolute;
+		right: -60px;
+		bottom: -90px;
+		width: 260px;
+		height: 260px;
+		border: 1px solid rgb(255 255 255 / 12%);
+		border-radius: 50%;
+	}
+
+	.latest {
+		padding-top: 0;
+	}
+
+	.closing-section {
+		padding-top: 24px;
+	}
+
+	.closing-card {
+		position: relative;
+		overflow: hidden;
+		padding: clamp(38px, 7vw, 78px);
+		border: 1px solid var(--line);
+		border-radius: calc(var(--radius) + 6px);
+		background: var(--paper-light);
+		text-align: center;
+	}
+
+	.closing-card::before,
+	.closing-card::after {
+		position: absolute;
+		width: 260px;
+		height: 260px;
+		border: 1px solid var(--line);
+		border-radius: 50%;
+		content: "";
+	}
+
+	.closing-card::before {
+		top: -170px;
+		left: -90px;
+	}
+
+	.closing-card::after {
+		right: -110px;
+		bottom: -190px;
+	}
+
+	.closing-card h2 {
+		margin-top: 18px;
+		font-size: clamp(38px, 6vw, 64px);
+		letter-spacing: -0.05em;
+	}
+
+	.closing-card > p:not(.eyebrow) {
+		max-width: 620px;
+		margin: 24px auto 0;
+		color: var(--muted);
+		font-family: var(--font-serif);
+		line-height: 1.9;
+	}
+
+	.closing-actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 24px;
+		margin-top: 32px;
+	}
+
+	@media (max-width: 920px) {
+		.hero-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.hero-visual {
+			width: min(78vw, 390px);
+		}
+
+		.featured-story {
+			grid-template-columns: 1fr;
+		}
+
+		.featured-ornament {
+			min-height: 150px;
+			flex-direction: row;
+			align-items: end;
+			border-top: 1px solid rgb(255 255 255 / 10%);
+			border-left: 0;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.home-hero {
+			padding-block: 58px 52px;
+		}
+
+		.hero-grid {
+			gap: 42px;
+		}
+
+		.hero-copy h1 {
+			font-size: clamp(48px, 15vw, 72px);
+		}
+
+		.hero-lead {
+			font-size: 16px;
+		}
+
+		.hero-visual {
+			width: min(82vw, 330px);
+		}
+
+		.core {
+			width: 136px;
+			height: 136px;
+		}
+
+		.core span {
+			font-size: 52px;
+		}
+
+		.direction-card {
+			grid-template-columns: 38px 1fr 20px;
+			gap: 14px;
+			padding: 22px;
+		}
+
+		.direction-title {
+			align-items: start;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.featured-content {
+			padding: 30px 24px 36px;
+		}
+
+		.featured-ornament strong {
+			font-size: 72px;
+		}
+
+		.closing-actions {
+			flex-direction: column;
+		}
+	}
+</style>

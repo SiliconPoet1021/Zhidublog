@@ -5,17 +5,31 @@
   "engines": {
     "node": ">=22.23.4"
   },
+  "overrides": {
+    "katex": "0.18.11"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "npm run build && npm run check:site",
+    "check:security": "npm audit --omit=dev --registry=https://registry.npmjs.org",
+    "check:site": "node scripts/check-site.mjs",
     "preview": "astro preview",
+    "studio": "node scripts/studio.mjs",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.8",
     "@astrojs/mdx": "^8.1.2",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.4.5",
+    "gray-matter": "^4.0.3",
+    "katex": "0.18.11",
+    "marked": "^18.2.0",
+    "marked-katex-extension": "^5.1.13",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
     "sharp": "^0.35.0"
   }
 }

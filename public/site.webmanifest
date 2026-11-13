@@ -1,0 +1,18 @@
+{
+	"name": "知渡",
+	"short_name": "知渡",
+	"description": "记录技术实践、项目复盘与成长经验。",
+	"lang": "zh-CN",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#f4f0e6",
+	"theme_color": "#173f35",
+	"icons": [
+		{
+			"src": "/favicon.svg",
+			"type": "image/svg+xml",
+			"sizes": "any",
+			"purpose": "any"
+		}
+	]
+}

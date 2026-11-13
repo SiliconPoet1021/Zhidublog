@@ -12,6 +12,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# local experiments and temporary deployment archives
+work/
+
 
 # environment variables
 .env

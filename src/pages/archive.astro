@@ -1,0 +1,369 @@
+---
+import FormattedDate from '../components/FormattedDate.astro';
+import { CATEGORY_META, type CategoryKey } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+	getPostHref,
+	getPublishedPosts,
+	getTagCounts,
+	getTagHref,
+	type BlogPost,
+} from '../lib/posts';
+
+const posts = await getPublishedPosts();
+const categoryEntries = Object.entries(CATEGORY_META) as [
+	CategoryKey,
+	(typeof CATEGORY_META)[CategoryKey],
+][];
+const categoryCounts = Object.fromEntries(
+	categoryEntries.map(([key]) => [key, posts.filter((post) => post.data.category === key).length]),
+) as Record<CategoryKey, number>;
+const tags = getTagCounts(posts);
+const postsByYear = new Map<string, BlogPost[]>();
+
+for (const post of posts) {
+	const year = String(post.data.pubDate.getFullYear());
+	const yearPosts = postsByYear.get(year) ?? [];
+	yearPosts.push(post);
+	postsByYear.set(year, yearPosts);
+}
+---
+
+<BaseLayout title="文章归档" description="按时间、分类和标签浏览知渡博客的全部文章。">
+	<section class="page-hero">
+		<div class="container page-hero-grid">
+			<div>
+				<p class="eyebrow">WRITING TIMELINE</p>
+				<h1 class="page-title">文章归档</h1>
+				<p class="page-description">
+					把内容放回时间里，会发现一些单独阅读时看不到的变化。这里按年份整理全部记录，也保留了分类与标签入口。
+				</p>
+			</div>
+			<p class="page-hero-note">
+				共有 {posts.length} 篇记录，覆盖 {categoryEntries.length} 个方向。<br />持续写，持续更新。
+			</p>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container archive-layout">
+			<aside class="archive-sidebar" aria-label="归档筛选">
+				<section class="archive-panel">
+					<p>内容分类</p>
+					<nav>
+						{
+							categoryEntries.map(([key, category]) => (
+								<a href={`/categories/${key}/`}>
+									<span>{category.label}</span>
+									<strong>{categoryCounts[key]}</strong>
+								</a>
+							))
+						}
+					</nav>
+				</section>
+
+				<section class="archive-panel">
+					<div class="archive-panel-heading">
+						<p>热门标签</p>
+						<a href="/tags/">全部</a>
+					</div>
+					<div class="tag-list">
+						{tags.slice(0, 10).map(({ tag }) => <a class="tag" href={getTagHref(tag)}>{tag}</a>)}
+					</div>
+				</section>
+
+				<a class="archive-subscribe" href="/rss.xml">
+					<span>RSS</span>
+					<strong>订阅后续更新</strong>
+					<small>新文章发布时自动获取 ↗</small>
+				</a>
+			</aside>
+
+			<div class="archive-timeline">
+				{
+					[...postsByYear.entries()].map(([year, yearPosts]) => (
+						<section class="year-group">
+							<header class="year-heading">
+								<h2>{year}</h2>
+								<span>{yearPosts.length} 篇</span>
+							</header>
+
+							<div class="year-posts">
+								{yearPosts.map((post) => (
+									<a class="archive-row" href={getPostHref(post)}>
+										<FormattedDate date={post.data.pubDate} />
+										<div>
+											<div class="archive-row-meta">
+												<span>{CATEGORY_META[post.data.category].label}</span>
+												{post.data.featured && <small>精选</small>}
+											</div>
+											<h3>{post.data.title}</h3>
+											<p>{post.data.description}</p>
+										</div>
+										<span class="archive-arrow" aria-hidden="true">↗</span>
+									</a>
+								))}
+							</div>
+						</section>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.archive-layout {
+		display: grid;
+		grid-template-columns: 260px minmax(0, 1fr);
+		align-items: start;
+		gap: 72px;
+	}
+
+	.archive-sidebar {
+		position: sticky;
+		top: 108px;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.archive-panel {
+		padding: 22px;
+		border: 1px solid var(--line);
+		border-radius: 18px;
+		background: rgb(255 253 247 / 54%);
+	}
+
+	.archive-panel > p,
+	.archive-panel-heading > p {
+		color: var(--ink);
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+	}
+
+	.archive-panel nav {
+		display: flex;
+		flex-direction: column;
+		margin-top: 12px;
+	}
+
+	.archive-panel nav a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 10px 0;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+		font-size: 12px;
+		text-decoration: none;
+	}
+
+	.archive-panel nav a:hover {
+		color: var(--accent);
+	}
+
+	.archive-panel nav strong {
+		color: var(--ink);
+		font-family: var(--font-serif);
+		font-size: 15px;
+		font-weight: 400;
+	}
+
+	.archive-panel-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 16px;
+	}
+
+	.archive-panel-heading a {
+		color: var(--muted);
+		font-size: 9px;
+	}
+
+	.archive-subscribe {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		padding: 20px 22px;
+		border-radius: 18px;
+		background: var(--green);
+		color: rgb(255 253 247 / 66%);
+		text-decoration: none;
+		transition: transform 160ms ease;
+	}
+
+	.archive-subscribe:hover {
+		color: var(--paper-light);
+		transform: translateY(-2px);
+	}
+
+	.archive-subscribe span {
+		color: var(--gold);
+		font-size: 9px;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+	}
+
+	.archive-subscribe strong {
+		margin-top: 4px;
+		color: var(--paper-light);
+		font-family: var(--font-serif);
+		font-size: 17px;
+	}
+
+	.archive-subscribe small {
+		font-size: 9px;
+	}
+
+	.archive-timeline {
+		min-width: 0;
+	}
+
+	.year-group + .year-group {
+		margin-top: 64px;
+	}
+
+	.year-heading {
+		display: flex;
+		align-items: end;
+		gap: 14px;
+		margin-bottom: 18px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--line-strong);
+	}
+
+	.year-heading h2 {
+		font-size: 42px;
+		letter-spacing: -0.04em;
+		line-height: 1;
+	}
+
+	.year-heading span {
+		padding-bottom: 4px;
+		color: var(--muted);
+		font-size: 10px;
+		letter-spacing: 0.08em;
+	}
+
+	.year-posts {
+		display: grid;
+		gap: 8px;
+	}
+
+	.archive-row {
+		display: grid;
+		grid-template-columns: 110px minmax(0, 1fr) 24px;
+		align-items: center;
+		gap: 24px;
+		padding: 22px 18px;
+		border: 1px solid transparent;
+		border-radius: 15px;
+		text-decoration: none;
+		transition:
+			border-color 160ms ease,
+			background 160ms ease,
+			transform 160ms ease;
+	}
+
+	.archive-row:hover {
+		border-color: var(--line);
+		background: rgb(255 253 247 / 58%);
+		transform: translateX(3px);
+	}
+
+	.archive-row time {
+		color: var(--muted);
+		font-size: 10px;
+	}
+
+	.archive-row-meta {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		color: var(--accent);
+		font-size: 9px;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+	}
+
+	.archive-row-meta small {
+		padding: 2px 6px;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--gold) 22%, transparent);
+		color: var(--ink-soft);
+		font-size: 8px;
+	}
+
+	.archive-row h3 {
+		margin-top: 6px;
+		font-size: 20px;
+		line-height: 1.4;
+		letter-spacing: -0.015em;
+	}
+
+	.archive-row p {
+		display: -webkit-box;
+		margin-top: 5px;
+		overflow: hidden;
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.65;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+
+	.archive-arrow {
+		color: var(--muted);
+		font-size: 16px;
+		text-align: right;
+	}
+
+	@media (max-width: 900px) {
+		.archive-layout {
+			grid-template-columns: 1fr;
+			gap: 42px;
+		}
+
+		.archive-sidebar {
+			position: static;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.archive-subscribe {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.archive-sidebar {
+			grid-template-columns: 1fr;
+		}
+
+		.archive-subscribe {
+			grid-column: auto;
+		}
+
+		.archive-row {
+			grid-template-columns: 1fr 20px;
+			gap: 12px;
+		}
+
+		.archive-row time {
+			grid-column: 1 / -1;
+		}
+
+		.archive-row p {
+			display: none;
+		}
+
+		.year-heading h2 {
+			font-size: 36px;
+		}
+	}
+</style>

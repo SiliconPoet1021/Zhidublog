@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="页面没有找到" description="你访问的页面不存在。" noindex>
+	<section class="not-found">
+		<div class="container not-found-inner">
+			<p class="eyebrow">404 · LOST NOTE</p>
+			<div class="not-found-code" aria-hidden="true">404</div>
+			<h1>这条路暂时没有记录</h1>
+			<p>页面可能已经移动，或者链接写错了。你可以回到首页，继续浏览已有的内容。</p>
+			<div class="not-found-actions">
+				<a class="button" href="/">返回首页</a>
+				<a class="button button--secondary" href="/blog/">浏览文章</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.not-found {
+		display: grid;
+		min-height: 68vh;
+		place-items: center;
+		padding-block: 70px;
+		text-align: center;
+	}
+
+	.not-found-inner {
+		position: relative;
+		max-width: 760px;
+	}
+
+	.not-found-code {
+		position: absolute;
+		z-index: -1;
+		top: 24px;
+		left: 50%;
+		color: rgb(23 63 53 / 5%);
+		font-family: var(--font-serif);
+		font-size: clamp(120px, 30vw, 280px);
+		font-weight: 700;
+		line-height: 1;
+		transform: translateX(-50%);
+	}
+
+	.not-found h1 {
+		margin-top: 18px;
+		font-size: clamp(38px, 7vw, 64px);
+		letter-spacing: -0.05em;
+	}
+
+	.not-found p:not(.eyebrow) {
+		max-width: 520px;
+		margin: 22px auto 0;
+		color: var(--muted);
+		line-height: 1.9;
+	}
+
+	.not-found-actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 12px;
+		margin-top: 32px;
+	}
+</style>

@@ -1,0 +1,71 @@
+---
+import PostCard from '../../components/PostCard.astro';
+import { CATEGORY_META, type CategoryKey } from '../../consts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+export function getStaticPaths() {
+	return (Object.entries(CATEGORY_META) as [
+		CategoryKey,
+		(typeof CATEGORY_META)[CategoryKey],
+	][]).map(([category, meta]) => ({
+		params: { category },
+		props: { meta },
+	}));
+}
+
+const { meta } = Astro.props as { meta: (typeof CATEGORY_META)[CategoryKey] };
+const category = Astro.params.category as CategoryKey;
+const posts = (await getPublishedPosts()).filter((post) => post.data.category === category);
+const categories = Object.entries(CATEGORY_META) as [
+	CategoryKey,
+	(typeof CATEGORY_META)[CategoryKey],
+][];
+---
+
+<BaseLayout
+	title={meta.label}
+	description={`${meta.description} 当前共有 ${posts.length} 篇记录。`}
+>
+	<section class="page-hero">
+		<div class="container page-hero-grid">
+			<div>
+				<p class="eyebrow">CATEGORY · {category.toUpperCase()}</p>
+				<h1 class="page-title">{meta.label}</h1>
+				<p class="page-description">{meta.description}</p>
+			</div>
+			<p class="page-hero-note">当前收录 {posts.length} 篇记录。<br />持续写，慢慢补全。</p>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container">
+			<nav class="category-filter" aria-label="文章分类">
+				<a class="category-pill" href="/blog/">全部</a>
+				{
+					categories.map(([key, item]) => (
+						<a
+							class:list={['category-pill', { 'is-active': key === category }]}
+							href={`/categories/${key}/`}
+							aria-current={key === category ? 'page' : undefined}
+						>
+							{item.label}
+						</a>
+					))
+				}
+			</nav>
+
+			{
+				posts.length > 0 ? (
+					<div class="post-grid">
+						{posts.map((post, index) => (
+							<PostCard post={post} featured={index === 0} />
+						))}
+					</div>
+				) : (
+					<div class="empty-state">这个分类还在等待第一篇记录。</div>
+				)
+			}
+		</div>
+	</section>
+</BaseLayout>

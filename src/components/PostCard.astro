@@ -1,0 +1,175 @@
+---
+import type { BlogPost } from '../lib/posts';
+import { getPostHref, getReadingTime, getTagHref } from '../lib/posts';
+import { CATEGORY_META } from '../consts';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	post: BlogPost;
+	featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const category = CATEGORY_META[post.data.category];
+const href = getPostHref(post);
+const readingTime = getReadingTime(post.body);
+---
+
+<article class:list={['post-card', { 'post-card--featured': featured }]}>
+	<div class="post-meta">
+		<span class="category-label">{category.label}</span>
+		<span aria-hidden="true">·</span>
+		<FormattedDate date={post.data.pubDate} />
+	</div>
+
+	{
+		featured ? (
+			<h2><a href={href}>{post.data.title}</a></h2>
+		) : (
+			<h3><a href={href}>{post.data.title}</a></h3>
+		)
+	}
+
+	<p class="post-description">{post.data.description}</p>
+
+	{
+		post.data.tags.length > 0 && (
+			<div class="post-tags" aria-label="文章标签">
+				{post.data.tags.map((tag) => <a href={getTagHref(tag)}>{tag}</a>)}
+			</div>
+		)
+	}
+
+	<div class="post-footer">
+		<span>{readingTime} 分钟阅读</span>
+		<a href={href} aria-label={`阅读《${post.data.title}》`}>
+			阅读全文 <span aria-hidden="true">↗</span>
+		</a>
+	</div>
+</article>
+
+<style>
+	.post-card {
+		display: flex;
+		min-height: 330px;
+		flex-direction: column;
+		padding: 30px;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		background: rgb(255 253 247 / 68%);
+		transition:
+			border-color 180ms ease,
+			box-shadow 180ms ease,
+			transform 180ms ease;
+	}
+
+	.post-card:hover {
+		border-color: var(--line-strong);
+		box-shadow: var(--shadow);
+		transform: translateY(-4px);
+	}
+
+	.post-card--featured {
+		background: var(--paper-light);
+	}
+
+	.post-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 9px;
+		color: var(--muted);
+		font-size: 11px;
+		letter-spacing: 0.04em;
+	}
+
+	.category-label {
+		color: var(--accent);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+	}
+
+	h2,
+	h3 {
+		margin-top: 24px;
+		letter-spacing: -0.025em;
+	}
+
+	h2 {
+		font-size: clamp(30px, 4vw, 42px);
+	}
+
+	h3 {
+		font-size: clamp(24px, 3vw, 30px);
+	}
+
+	h2 a,
+	h3 a {
+		text-decoration: none;
+	}
+
+	h2 a:hover,
+	h3 a:hover {
+		color: var(--accent);
+	}
+
+	.post-description {
+		margin-top: 18px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 1.85;
+	}
+
+	.post-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 7px;
+		margin-top: 20px;
+	}
+
+	.post-tags a {
+		padding: 3px 9px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		color: var(--muted);
+		font-size: 10px;
+		text-decoration: none;
+	}
+
+	.post-tags a:hover {
+		border-color: var(--line-strong);
+		color: var(--accent);
+	}
+
+	.post-footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 18px;
+		margin-top: auto;
+		padding-top: 34px;
+		color: var(--muted);
+		font-size: 11px;
+	}
+
+	.post-footer a {
+		color: var(--ink);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.post-footer a:hover {
+		color: var(--accent);
+	}
+
+	@media (max-width: 640px) {
+		.post-card {
+			min-height: 0;
+			padding: 24px;
+		}
+
+		.post-footer {
+			padding-top: 26px;
+		}
+	}
+</style>

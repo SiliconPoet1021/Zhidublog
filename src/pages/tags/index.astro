@@ -1,0 +1,117 @@
+---
+import { getPublishedPosts, getTagHref, getTagCounts } from '../../lib/posts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = await getPublishedPosts();
+const tags = getTagCounts(posts);
+---
+
+<BaseLayout title="文章标签" description="按标签浏览知渡博客中的技术实践、项目复盘和成长记录。">
+	<section class="page-hero">
+		<div class="container page-hero-grid">
+			<div>
+				<p class="eyebrow">TOPIC INDEX</p>
+				<h1 class="page-title">文章标签</h1>
+				<p class="page-description">
+					标签是内容之间的连接线。从一个关键词出发，可以看到同一主题下的不同项目、判断和阶段。
+				</p>
+			</div>
+			<p class="page-hero-note">当前共有 {tags.length} 个标签。<br />去归档页按时间查看全部记录。</p>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container">
+			<div class="tag-cloud">
+				{
+					tags.map(({ tag, count }) => (
+						<a class="tag-cloud-item" href={getTagHref(tag)}>
+							<span>{tag}</span>
+							<small>{count}</small>
+						</a>
+					))
+				}
+			</div>
+
+			<div class="archive-actions">
+				<a class="button button--secondary" href="/blog/">浏览全部文章</a>
+				<a class="text-link" href="/archive/">按时间查看归档</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.tag-cloud {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
+	.tag-cloud-item {
+		display: inline-flex;
+		min-height: 52px;
+		align-items: center;
+		gap: 12px;
+		padding: 0 19px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: rgb(255 253 247 / 56%);
+		color: var(--ink);
+		text-decoration: none;
+		transition:
+			border-color 160ms ease,
+			background 160ms ease,
+			transform 160ms ease;
+	}
+
+	.tag-cloud-item:hover {
+		border-color: var(--line-strong);
+		background: var(--paper-light);
+		color: var(--accent);
+		transform: translateY(-2px);
+	}
+
+	.tag-cloud-item span {
+		font-family: var(--font-serif);
+		font-size: 17px;
+	}
+
+	.tag-cloud-item small {
+		display: grid;
+		min-width: 23px;
+		height: 23px;
+		place-items: center;
+		border-radius: 50%;
+		background: var(--paper-muted);
+		color: var(--muted);
+		font-size: 9px;
+	}
+
+	.archive-actions {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		margin-top: 46px;
+	}
+
+	@media (max-width: 560px) {
+		.tag-cloud {
+			gap: 9px;
+		}
+
+		.tag-cloud-item {
+			min-height: 46px;
+			padding-inline: 15px;
+		}
+
+		.tag-cloud-item span {
+			font-size: 15px;
+		}
+
+		.archive-actions {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+	}
+</style>
