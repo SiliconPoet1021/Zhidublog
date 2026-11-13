@@ -34,48 +34,6 @@ npm run build
 
 构建结果输出到 `dist/`。
 
-## 本地写作台
-
-项目内置了一个只在本机运行的写作台，不需要手动创建 Markdown 文件。
-
-Windows 下可以直接双击：
-
-```text
-start-studio.cmd
-```
-
-脚本会启动 Astro 本地预览和写作服务，并自动打开：
-
-```text
-http://127.0.0.1:4322
-```
-
-也可以手动运行：
-
-```bash
-npm run dev
-npm run studio
-```
-
-写作台支持：
-
-- 新建和编辑文章
-- 搜索已有文章
-- Markdown 实时预览
-- 导入已有 Markdown 文件
-- 设置分类、标签、精选和草稿
-- 保存到 `src/content/blog/`
-- 一键提交并推送到 GitHub
-
-注意：
-
-- “保存”只会写入本地项目，不会上线。
-- “发布到线上”会为当前文章创建 Git 提交并推送。
-- 推送成功后，Cloudflare Pages 会自动构建并上线；本机不需要保持运行。
-- 如果以后需要国内服务器作为备用线路，可以再启用 `deploy/` 中的可选脚本。
-- 写作台只监听 `127.0.0.1`，不会暴露到公网。
-- 发布前请确保本机 Git 已登录 GitHub，并具备该仓库的推送权限。
-
 ## 编写文章
 
 文章位于 `src/content/blog/`，支持 `.md` 和 `.mdx`。
@@ -129,9 +87,7 @@ $$
 $$
 ```
 
-文章正文和本机写作台预览都支持公式。如果正文确实需要显示美元符号，请写成 `\$`，避免被识别为公式。
-
-写作台正文工具栏还提供「行内公式」「公式块」和「代码块」快捷按钮。完整示例见 `src/content/blog/latex-math-guide.md`。
+文章正文支持公式。如果正文确实需要显示美元符号，请写成 `\$`，避免被识别为公式。完整示例见 `src/content/blog/latex-math-guide.md`。
 
 Markdown、代码高亮和数学公式都在构建阶段解析。Cloudflare Pages 只发布已经生成的 HTML、CSS、字体和图片，不会在每次访问时重新解析文章，也不需要数据库或长期运行的 Node.js 服务。
 
@@ -161,7 +117,7 @@ PUBLIC_CF_WEB_ANALYTICS_TOKEN=你的统计令牌
 
 ### Cloudflare Pages（推荐）
 
-Cloudflare Pages 直接连接 GitHub 仓库，不需要购买服务器或配置 Nginx。以后写作台推送文章到 GitHub，Pages 会自动重新构建上线。
+Cloudflare Pages 直接连接 GitHub 仓库，不需要购买服务器或配置 Nginx。以后把文章推送到 GitHub，Pages 会自动重新构建上线。
 
 在 Cloudflare 控制台进入 **Workers & Pages → Create → Pages → Connect to Git**，选择 `SiliconPoet1021/Zhidublog`，使用以下配置：
 
@@ -200,7 +156,7 @@ deploy/README.md
 
 国内服务器需要已备案域名，并需要在 `.env` 中额外填写服务器信息。完整步骤见 [deploy/README.md](deploy/README.md)，上线和安全检查分别见 [deploy/LAUNCH.md](deploy/LAUNCH.md) 与 [deploy/SECURITY.md](deploy/SECURITY.md)。
 
-Cloudflare Pages 不需要配置 `DEPLOY_HOST` 和 SSH 密钥。写作台只负责推送 GitHub，Cloudflare 负责后续构建。
+Cloudflare Pages 不需要配置 `DEPLOY_HOST` 和 SSH 密钥。
 
 ## 项目结构
 
@@ -212,11 +168,8 @@ src/
 ├── lib/              文章读取与工具函数
 ├── pages/            路由页面
 └── styles/           全局样式
-scripts/studio.mjs    本地写作台服务
 scripts/check-site.mjs 上线前页面检查
-studio/               写作台网页界面
 deploy/                Cloudflare 指南与可选国内部署脚本
-start-studio.cmd      Windows 一键启动入口
 ```
 
 ## 上线前检查

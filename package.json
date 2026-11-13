@@ -15,7 +15,6 @@
     "check:security": "npm audit --omit=dev --registry=https://registry.npmjs.org",
     "check:site": "node scripts/check-site.mjs",
     "preview": "astro preview",
-    "studio": "node scripts/studio.mjs",
     "astro": "astro"
   },
   "dependencies": {
@@ -24,10 +23,7 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.4.5",
-    "gray-matter": "^4.0.3",
     "katex": "0.18.11",
-    "marked": "^18.2.0",
-    "marked-katex-extension": "^5.1.13",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.35.0"

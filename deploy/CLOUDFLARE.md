@@ -67,14 +67,14 @@ Cloudflare 托管不要求中国大陆 ICP 备案，但域名实名认证仍按�
 
 ## 6. 写作与自动发布
 
-写作台点击“发布到线上”后会：
+文章仍然使用 Markdown 编写。发布流程：
 
-1. 保存 Markdown。
-2. 提交并推送到 GitHub。
-3. Cloudflare Pages 自动检测 `main` 分支更新。
-4. 自动构建并发布新版网站。
+1. 在 `src/content/blog/` 新建或修改 Markdown 文件。
+2. 运行 `npm run check` 检查构建和页面链接。
+3. 提交并推送到 GitHub。
+4. Cloudflare Pages 自动检测 `main` 分支更新、构建并发布新版网站。
 
-写作台不需要配置 `DEPLOY_HOST`，也不需要服务器 SSH 密钥。
+Cloudflare Pages 不需要配置 `DEPLOY_HOST`，也不需要服务器 SSH 密钥。
 
 ## 7. 上线后检查
 
