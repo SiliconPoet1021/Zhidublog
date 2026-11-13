@@ -39,6 +39,10 @@
 
 ## 内容授权
 
-除特别注明外，本站由 JinSun 创作的原创文字内容采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans) 协议授权。
+本站代码和文章采用不同的授权方式：
 
-转载时请注明作者和来源；商业使用或超出协议范围的用途，请先联系作者获得授权。
+- **源代码**：采用 [MIT License](LICENSE)，Copyright (c) 2026 JinSun。
+- **原创文章与文字内容**：除特别注明外，采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans) 协议授权。
+- **品牌与第三方素材**：“知渡”名称、Logo、品牌视觉，以及第三方字体、图片和图标不包含在上述授权范围内，仍遵循各自的权利声明。
+
+转载文章时请注明作者和来源；商业使用或超出协议范围的用途，请先联系作者获得授权。
