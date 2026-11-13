@@ -1,0 +1,86 @@
+---
+import { SITE_AUTHOR } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="内容授权"
+	description={`了解 ${SITE_AUTHOR} 博客原创文字内容的使用授权范围。`}
+>
+	<section class="page-hero">
+		<div class="container page-hero-grid">
+			<div>
+				<p class="eyebrow">LICENSE &amp; REUSE</p>
+				<h1 class="page-title">内容授权</h1>
+				<p class="page-description">
+					这里说明本站原创内容可以被怎样使用，以及转载、引用和改编时需要遵守的边界。
+				</p>
+			</div>
+			<p class="page-hero-note">
+				保留署名，<br />让内容流动得更远。
+			</p>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container license-content prose">
+			<h2>原创文字授权</h2>
+			<p>
+				除特别注明外，本站由 {SITE_AUTHOR} 创作的原创文字内容采用
+				<a
+					href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans"
+					target="_blank"
+					rel="license noreferrer">CC BY-NC-SA 4.0 国际许可协议</a
+				>
+				授权。
+			</p>
+			<p>这意味着，在遵守以下条件的前提下，你可以复制、分享和改编这些内容：</p>
+			<ul>
+				<li><strong>署名：</strong>注明作者 {SITE_AUTHOR}，并链接回原文或本站。</li>
+				<li><strong>非商业：</strong>不得将内容直接用于商业销售、付费课程或商业推广。</li>
+				<li><strong>相同方式共享：</strong>如果改编了内容，改编作品需要使用相同协议分享。</li>
+			</ul>
+
+			<h2>不包含在授权范围内的内容</h2>
+			<p>
+				第三方图片、引用、商标、项目截图以及明确标注了其他授权方式的内容，仍归原作者或权利人所有，不在上述 CC
+				授权范围内。使用这些内容前，请先确认原权利人的授权条件。
+			</p>
+
+			<h2>代码示例</h2>
+			<p>
+				文章中的代码示例如没有单独的授权声明，默认保留权利。如果你希望在项目中复用代码，建议先通过
+				<a href="https://github.com/SiliconPoet1021" target="_blank" rel="noreferrer">GitHub</a>
+				联系作者说明用途。
+			</p>
+
+			<h2>商业使用</h2>
+			<p>
+				如需将本站原创内容用于商业用途，请先取得作者书面授权。普通转载和署名分享通常不需要单独联系，但仍需遵守上述许可条件。
+			</p>
+
+			<p class="license-note">
+				本页面只说明本站内容授权，不构成法律意见；具体使用场景如有疑问，请以原始协议文本和双方沟通结果为准。
+			</p>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.license-content {
+		max-width: 820px;
+	}
+
+	.license-content h2:first-child {
+		margin-top: 0;
+	}
+
+	.license-content a {
+		color: var(--accent);
+	}
+
+	.license-note {
+		color: var(--muted);
+		font-size: 14px;
+	}
+</style>

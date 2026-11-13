@@ -1,5 +1,5 @@
 ---
-import { GITHUB_URL, NAV_ITEMS, SITE_TITLE } from '../consts';
+import { GITHUB_URL, NAV_ITEMS, SITE_AUTHOR, SITE_TITLE } from '../consts';
 
 const today = new Date();
 ---
@@ -21,13 +21,21 @@ const today = new Date();
 				<span>订阅与连接</span>
 				<a href="/rss.xml">RSS 订阅</a>
 				<a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub</a>
+				<a href="/license/">授权说明</a>
 			</div>
 		</div>
 	</div>
 
 	<div class="container footer-bottom">
-		<p>© {today.getFullYear()} {SITE_TITLE}. 保留所有权利。</p>
-		<p>Built with Astro · Hosted on Cloudflare Pages</p>
+		<p>
+			© {today.getFullYear()} {SITE_AUTHOR}. 除特别注明外，本站原创文字内容采用
+			<a
+				href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans"
+				target="_blank"
+				rel="license noreferrer">CC BY-NC-SA 4.0</a
+			> 授权。
+		</p>
+		<p>Designed &amp; written by {SITE_AUTHOR}</p>
 	</div>
 </footer>
 
