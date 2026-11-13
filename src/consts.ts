@@ -2,7 +2,10 @@ export const SITE_TITLE = '知渡';
 export const SITE_DESCRIPTION =
 	'记录技术实践、项目复盘与成长经验，把走过的路写成可以复用的地图。';
 export const SITE_AUTHOR = 'JinSun';
+export const SITE_AUTHOR_DESCRIPTION =
+	'JinSun，知渡博客的作者，记录技术实践、项目复盘与长期成长中的真实经验。';
 export const GITHUB_URL = 'https://github.com/SiliconPoet1021';
+export const CONTENT_LICENSE_URL = 'https://creativecommons.org/licenses/by-nc-sa/4.0/';
 
 export const NAV_ITEMS = [
 	{ href: '/', label: '首页' },

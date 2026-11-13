@@ -5,7 +5,10 @@ import 'katex/dist/katex.min.css';
 import FormattedDate from '../components/FormattedDate.astro';
 import {
 	CATEGORY_META,
+	CONTENT_LICENSE_URL,
+	GITHUB_URL,
 	SITE_AUTHOR,
+	SITE_AUTHOR_DESCRIPTION,
 	SITE_DESCRIPTION,
 	SITE_TITLE,
 	type CategoryKey,
@@ -48,23 +51,46 @@ const {
 const categoryInfo = CATEGORY_META[category];
 const visibleHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const authorURL = new URL('/about/', Astro.site);
+const personID = new URL('/about/#person', Astro.site);
+const websiteID = new URL('/#website', Astro.site);
 const jsonLd = JSON.stringify({
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
+	'@id': `${canonicalURL.toString()}#article`,
 	headline: title,
 	description,
 	datePublished: pubDate.toISOString(),
 	dateModified: (updatedDate ?? pubDate).toISOString(),
 	author: {
 		'@type': 'Person',
+		'@id': personID.toString(),
 		name: SITE_AUTHOR,
+		url: authorURL.toString(),
+		description: SITE_AUTHOR_DESCRIPTION,
+		sameAs: [GITHUB_URL],
 	},
 	publisher: {
-		'@type': 'Organization',
+		'@type': 'Person',
+		'@id': personID.toString(),
+		name: SITE_AUTHOR,
+		url: authorURL.toString(),
+	},
+	image: heroImage
+		? new URL(heroImage.src, Astro.site).toString()
+		: new URL('/og-default.png', Astro.site).toString(),
+	url: canonicalURL.toString(),
+	mainEntityOfPage: canonicalURL.toString(),
+	articleSection: categoryInfo.label,
+	keywords: tags.join(', '),
+	inLanguage: 'zh-CN',
+	license: CONTENT_LICENSE_URL,
+	isPartOf: {
+		'@type': 'WebSite',
+		'@id': websiteID.toString(),
+		url: new URL('/', Astro.site).toString(),
 		name: SITE_TITLE,
 	},
-	image: heroImage ? new URL(heroImage.src, Astro.site).toString() : undefined,
-	mainEntityOfPage: canonicalURL.toString(),
 }).replace(/</g, '\\u003c');
 const breadcrumbLd = JSON.stringify({
 	'@context': 'https://schema.org',
@@ -104,6 +130,9 @@ const breadcrumbLd = JSON.stringify({
 	image={heroImage}
 	type="article"
 	publishedTime={pubDate}
+	updatedTime={updatedDate ?? pubDate}
+	section={categoryInfo.label}
+	tags={tags}
 >
 	<div class="reading-progress" aria-hidden="true"><span></span></div>
 
@@ -131,7 +160,7 @@ const breadcrumbLd = JSON.stringify({
 						</div>
 						<div>
 							<span class="meta-label">作者</span>
-							<span>{SITE_AUTHOR}</span>
+							<a href="/about/">{SITE_AUTHOR}</a>
 						</div>
 					</div>
 					<button class="copy-link-button" type="button" data-copy-link>复制文章链接</button>
@@ -440,6 +469,15 @@ const breadcrumbLd = JSON.stringify({
 			font-weight: 700;
 			letter-spacing: 0.14em;
 			text-transform: uppercase;
+		}
+
+		.article-meta a {
+			color: var(--ink-soft);
+			text-decoration: none;
+		}
+
+		.article-meta a:hover {
+			color: var(--accent);
 		}
 
 		.copy-link-button {

@@ -11,7 +11,7 @@
 - 项目作品页、关于页和 404 页面
 - Markdown / MDX 文章工作流
 - 移动端文章目录、作者卡片、代码复制、章节锚点与文章链接分享
-- SEO、结构化数据、社交分享图、站点地图和 RSS
+- SEO 与 GEO 基础、结构化数据、社交分享图、站点地图和 RSS
 - Cloudflare Pages 自动部署、安全响应头和静态资源缓存
 - Cloudflare Web Analytics 访问统计（可选），并保留百度统计接入
 
@@ -108,10 +108,14 @@ Markdown、代码高亮和数学公式都在构建阶段解析。Cloudflare Page
 ```env
 PUBLIC_BAIDU_ANALYTICS_ID=你的百度统计编号
 PUBLIC_BAIDU_SITE_VERIFICATION=你的站点验证代码
+PUBLIC_GOOGLE_SITE_VERIFICATION=你的 Google 验证代码
+PUBLIC_BING_SITE_VERIFICATION=你的 Bing 验证代码
 PUBLIC_CF_WEB_ANALYTICS_TOKEN=你的统计令牌
 ```
 
 百度统计适合补充中国大陆的访问数据。后续需要更完整的自有管理看板时，可以再接入 Umami 或 Cloudflare 的自定义分析方案。
+
+SEO 与 GEO 的上线、内容和每月复盘清单见 [deploy/SEO-GEO.md](deploy/SEO-GEO.md)。
 
 ## 部署
 
@@ -137,6 +141,8 @@ SITE_URL=https://你的域名
 NODE_VERSION=22.23.4
 PUBLIC_BAIDU_ANALYTICS_ID=
 PUBLIC_BAIDU_SITE_VERIFICATION=
+PUBLIC_GOOGLE_SITE_VERIFICATION=
+PUBLIC_BING_SITE_VERIFICATION=
 PUBLIC_CF_WEB_ANALYTICS_TOKEN=
 ```
 

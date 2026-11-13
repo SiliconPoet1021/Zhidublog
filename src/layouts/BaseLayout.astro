@@ -12,9 +12,22 @@ interface Props {
 	type?: 'website' | 'article';
 	noindex?: boolean;
 	publishedTime?: Date;
+	updatedTime?: Date;
+	section?: string;
+	tags?: string[];
 }
 
-const { title, description, image, type = 'website', noindex = false, publishedTime } = Astro.props;
+const {
+	title,
+	description,
+	image,
+	type = 'website',
+	noindex = false,
+	publishedTime,
+	updatedTime,
+	section,
+	tags,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -27,6 +40,9 @@ const { title, description, image, type = 'website', noindex = false, publishedT
 			type={type}
 			noindex={noindex}
 			publishedTime={publishedTime}
+			updatedTime={updatedTime}
+			section={section}
+			tags={tags}
 		/>
 	</head>
 	<body>

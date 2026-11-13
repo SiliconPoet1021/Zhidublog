@@ -3,8 +3,15 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { Font } from 'astro:assets';
+import {
+	CONTENT_LICENSE_URL,
+	GITHUB_URL,
+	SITE_AUTHOR,
+	SITE_AUTHOR_DESCRIPTION,
+	SITE_DESCRIPTION,
+	SITE_TITLE,
+} from '../consts';
 
 interface Props {
 	title: string;
@@ -13,6 +20,9 @@ interface Props {
 	type?: 'website' | 'article';
 	noindex?: boolean;
 	publishedTime?: Date;
+	updatedTime?: Date;
+	section?: string;
+	tags?: string[];
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -24,11 +34,67 @@ const {
 	type = 'website',
 	noindex = false,
 	publishedTime,
+	updatedTime,
+	section,
+	tags = [],
 } = Astro.props;
 
 const baiduSiteVerification = import.meta.env.PUBLIC_BAIDU_SITE_VERIFICATION?.trim();
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION?.trim();
 const pageTitle = title === SITE_TITLE ? title : `${title} | ${SITE_TITLE}`;
 const imageURL = new URL(typeof image === 'string' ? image : image.src, Astro.site);
+const imageWidth = typeof image === 'string' ? 1200 : image.width;
+const imageHeight = typeof image === 'string' ? 630 : image.height;
+const authorURL = new URL('/about/', Astro.site);
+const personID = new URL('/about/#person', Astro.site);
+const websiteID = new URL('/#website', Astro.site);
+const isHomePage = canonicalURL.pathname === '/';
+const isAboutPage = /^\/about\/?$/.test(canonicalURL.pathname);
+
+const safeJSON = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c');
+
+const websiteLd = safeJSON({
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	'@id': websiteID.toString(),
+	name: SITE_TITLE,
+	alternateName: `${SITE_TITLE}博客`,
+	url: new URL('/', Astro.site).toString(),
+	description: SITE_DESCRIPTION,
+	inLanguage: 'zh-CN',
+	publisher: {
+		'@type': 'Person',
+		'@id': personID.toString(),
+		name: SITE_AUTHOR,
+		url: authorURL.toString(),
+		sameAs: [GITHUB_URL],
+	},
+});
+
+const profilePageLd = safeJSON({
+	'@context': 'https://schema.org',
+	'@type': 'ProfilePage',
+	'@id': new URL('/about/#profile', Astro.site).toString(),
+	url: authorURL.toString(),
+	name: `${SITE_AUTHOR} | ${SITE_TITLE}`,
+	description: SITE_AUTHOR_DESCRIPTION,
+	inLanguage: 'zh-CN',
+	isPartOf: {
+		'@type': 'WebSite',
+		'@id': websiteID.toString(),
+		url: new URL('/', Astro.site).toString(),
+		name: SITE_TITLE,
+	},
+	mainEntity: {
+		'@type': 'Person',
+		'@id': personID.toString(),
+		name: SITE_AUTHOR,
+		url: authorURL.toString(),
+		description: SITE_AUTHOR_DESCRIPTION,
+		sameAs: [GITHUB_URL],
+	},
+});
 ---
 
 <meta charset="utf-8" />
@@ -36,6 +102,8 @@ const imageURL = new URL(typeof image === 'string' ? image : image.src, Astro.si
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="manifest" href="/site.webmanifest" />
 <link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="author" href={authorURL} />
+<link rel="license" href={CONTENT_LICENSE_URL} />
 <link
 	rel="alternate"
 	type="application/rss+xml"
@@ -45,15 +113,26 @@ const imageURL = new URL(typeof image === 'string' ? image : image.src, Astro.si
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content="#173f35" />
 {baiduSiteVerification && <meta name="baidu-site-verification" content={baiduSiteVerification} />}
+{googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+{bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
 
 <Font cssVariable="--font-atkinson" preload />
 
 <link rel="canonical" href={canonicalURL} />
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+{
+	noindex ? (
+		<meta name="robots" content="noindex, nofollow" />
+	) : (
+		<meta
+			name="robots"
+			content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+		/>
+	)
+}
 
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
-<meta name="author" content="知渡" />
+<meta name="author" content={SITE_AUTHOR} />
 
 <meta property="og:type" content={type} />
 <meta property="og:locale" content="zh_CN" />
@@ -62,13 +141,19 @@ const imageURL = new URL(typeof image === 'string' ? image : image.src, Astro.si
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={imageURL} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content={String(imageWidth)} />
+<meta property="og:image:height" content={String(imageHeight)} />
 <meta property="og:image:alt" content={description} />
 {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+{updatedTime && <meta property="article:modified_time" content={updatedTime.toISOString()} />}
+{section && <meta property="article:section" content={section} />}
+{tags.map((tag) => <meta property="article:tag" content={tag} />)}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={imageURL} />
 <meta name="twitter:image:alt" content={description} />
+
+{isHomePage && <script type="application/ld+json" set:html={websiteLd} />}
+{isAboutPage && <script type="application/ld+json" set:html={profilePageLd} />}

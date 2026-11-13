@@ -1,9 +1,12 @@
 ---
-import { GITHUB_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { GITHUB_URL, SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="关于这里" description={`了解 ${SITE_TITLE} 的写作方向与记录原则。`}>
+<BaseLayout
+	title="关于这里"
+	description={`了解${SITE_TITLE}作者 ${SITE_AUTHOR} 的写作方向、记录原则与联系方式。`}
+>
 	<section class="page-hero">
 		<div class="container page-hero-grid">
 			<div>
@@ -24,7 +27,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			<article class="about-main prose">
 				<h2>写给未来的自己，也写给同路的人</h2>
 				<p>
-					我是这个博客的作者。这里主要记录技术实践、项目复盘和个人成长。很多内容来自一个具体的问题：为什么这样做？当时有哪些取舍？如果再来一次，我会改变什么？
+					我是 {SITE_AUTHOR}，知渡博客的作者和维护者。这里主要记录技术实践、项目复盘和个人成长。很多内容来自一个具体的问题：为什么这样做？当时有哪些取舍？如果再来一次，我会改变什么？
 				</p>
 				<p>
 					我不打算把它做成一个“什么都懂”的教程站。比起完整覆盖一个领域，我更愿意把真实经历写清楚，让读者看到一项技术、一段经历背后的上下文。
@@ -61,7 +64,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 					如果你对文章内容有不同看法，或者发现其中的错误，欢迎通过 GitHub 与我交流。认真、具体的反馈比单纯的赞美更珍贵。
 				</p>
 				<p>
-					<a class="button" href={GITHUB_URL} target="_blank" rel="noreferrer">访问 GitHub</a>
+					<a class="button" href={GITHUB_URL} target="_blank" rel="me noreferrer">访问 GitHub</a>
 				</p>
 			</article>
 
